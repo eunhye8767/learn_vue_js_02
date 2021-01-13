@@ -136,3 +136,127 @@ export default {
 ```
 <br />
 
+### 2.4. TodoInput 컴포넌트의 할 일 저장 기능 구현
+1. 인풋박스에 입력된 내용을 받기 위해 v-model 디렉티브를 이용한다
+2. v-model을 사용하기 위해 script 에 data 속성 newTodoItem을 추가하여 인풋박스 v-mdodel과 연결한다
+```
+<template>
+	<div>
+		<input type="text" v-model="newTodoItem">
+	</div>
+</template>
+```
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	}
+}
+```
+![2-4-1](./_images/2-4-1.png)<br />
+<br />
+
+3. add 버튼을 만들고 addTodo 이벤트를 연결한다.<br />
+연결된 이벤트를 script - methods 속성에 addTodo 함수를 만든다
+```
+<template>
+	<div>
+		<input type="text" v-model="newTodoItem">
+		<button v-on:click="addTodo">add</button>
+	</div>
+</template>
+```
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			
+		}
+	}
+}
+```
+
+4. 버튼을 클릭할 때마다 인풋박스에 입력된 내용이 log에 보이게 적용
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			console.log(this.newTodoItem);
+		}
+	}
+}
+```
+![2-4-2](./_images/2-4-2.png)<br />
+<br />
+
+5. 인풋박스 입력 후 add 를 클릭한 후에 localStarage(로컬스토리지)에 저장을 한다
+	- localStorage.setItem(keyName, keyValue)
+	- localStorage에 keyName, keyValue 값을 전달하여 추가하거나 업데이트
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			// 저장하는 로직
+			localStorage.setItem();
+		}
+	}
+}
+```
+
+6. setItem에 keyName 과 keyValue 값을 this.newTodoItem 으로 동일하게 적용한다
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			// 저장하는 로직
+			localStorage.setItem(this.newTodoItem, this.newTodoItem);
+		}
+	}
+}
+```
+
+7. localStorage(로컬스토리지)에 .setItem() 을 이용해 인풋박스에 입력된 정보를 저장하면 브라우저 개발자도구에서 **Application 패널 탭 -> Storage -> Local Storage 에서 입력된 정보를확인**할 수 있다<br />
+![2-4-3](./_images/2-4-3.png)<br />
+<br />
+
+8. add 버튼을 누른 후 인풋박스를 초기화시킨다
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			// 저장하는 로직
+			localStorage.setItem(this.newTodoItem, this.newTodoItem);
+			this.newTodoItem = ""
+		}
+	}
+}
+```
+![2-4-4](./_images/2-4-4.png)<br />
+<br />
