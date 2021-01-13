@@ -52,3 +52,46 @@
 ![1-2-1](./_images/1-2-1.png)
 
 <br /><br /><br />
+
+## 2. Todo App - 프로젝트 구현
+### 2.1. 컴포넌트 생성 및 등록하기
+1. **src/components 에 컴포넌트를 등록**한다
+2. components 폴더에 컴포넌트 .vue 파일을 생성하고 <br />
+vue 자동완성 기능을 통해 기본 구성(template, script, style)을 맞춰준다<br />
+![2-1-1](./_images/2-1-1.png)<br />
+
+3. src/App.vue 파일에 생성한 컴포넌트 파일을 script 영역에 연결(import)해준다
+```
+	<template>
+		<div id="app">
+			<TodoHeader></TodoHeader>
+			<TodoInput></TodoInput>
+			<TodoList></TodoList>
+			<TodoFooter></TodoFooter>
+		</div>
+	</template>
+
+	<script>
+	// 컴포넌트 등록
+	import TodoHeader from './components/TodoHeader.vue'
+	import TodoInput from './components/TodoInput.vue'
+	import TodoList from './components/TodoList.vue'
+	import TodoFooter from './components/TodoFooter.vue'
+
+	export default {
+		components: {
+			// 컴포넌트 태그명 : 컴포넌트 내용
+			'TodoHeader' : TodoHeader,
+			'TodoInput' : TodoInput,
+			'TodoList' : TodoList,
+			'TodoFooter' : TodoFooter,
+		}
+	}
+	</script>
+
+	<style>
+	</style>
+```
+
+4. 브라우저에서 확인해보면 컴포넌트별로 등록된 것을 확인할 수 있다<br />
+![2-1-2](./_images/2-1-2.png)<br />
