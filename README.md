@@ -95,3 +95,18 @@ vue 자동완성 기능을 통해 기본 구성(template, script, style)을 맞�
 
 4. 브라우저에서 확인해보면 컴포넌트별로 등록된 것을 확인할 수 있다<br />
 ![2-1-2](./_images/2-1-2.png)<br />
+
+<br />
+
+### 2.2. 파비콘, 아이콘, 폰트, 반응형 태그 설정하기
+- ./public/index.html 에 적용한다
+	1. 반응형 메타태그 외에 아래 메타태그 3종이 적용되어 있는 지 확인
+		- 뷰포트 < meta name="viewport" content="width=device-width,initial-scale=1.0" >
+	```
+		<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	```
+
+<br />
+
