@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App 333" s1="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" :my-message="msg"/> -->
-    <hello-world msg="Welcome to Your Vue.js App 555" s1="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" :my-message="msg"/>
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
@@ -11,15 +10,8 @@ import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  data () {
-    return {
-      msg : '안녕하세요 !!'
-    }
-
-  },
   components: {
     HelloWorld
-
   }
 }
 </script>
