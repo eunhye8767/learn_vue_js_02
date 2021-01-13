@@ -260,3 +260,124 @@ export default {
 ```
 ![2-4-4](./_images/2-4-4.png)<br />
 <br />
+
+### 2.5. TodoInput 컴포넌트 코드 정리 및 UI 스타일링
+1. 인풋박스 입력 -> add 버튼을 클릭하면 인풋박스 초기화 시켜주는 코드를 함수로 생성한다<br />
+	- clearInput 메서드 함수를 만들었다
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			localStorage.setItem(this.newTodoItem, this.newTodoItem);
+		},
+		clearInput: function() {
+			this.newTodoItem = ""
+		}
+	}
+}
+```
+
+2. addTodo 메서드 함수에서 this 를 이용하여 clearInput 함수를 실행시켜준다<br />
+그러면 아까와 동일한 기능을 적용하게 된다
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			localStorage.setItem(this.newTodoItem, this.newTodoItem);
+			this.clearInput();
+		},
+		clearInput: function() {
+			this.newTodoItem = ""
+		}
+	}
+}
+```
+
+3. UI 스타일링 작업(css 작업)
+	- button 에 적용한 v-on 디렉티브를 span에 추가하면 button과 동일한 기능이 적용된다
+	- **style** 에 **scoped** 를 적용하여 **해당 컴포넌트 .vue 파일에서만 적용**되게 한다
+```
+<template>
+	<div class="inputBox shadow">
+		<input type="text" v-model="newTodoItem">
+		<!-- <button v-on:click="addTodo">add</button> -->
+		<span class="addContainer" v-on:click="addTodo">
+			<i class="fas fa-plus addBtn"></i>
+		</span>
+	</div>
+</template>
+```
+```
+export default {
+	data: function() {
+		return {
+			newTodoItem: "",
+		}
+	},
+	methods: {
+		addTodo: function() {
+			localStorage.setItem(this.newTodoItem, this.newTodoItem);
+			this.clearInput();
+		},
+		clearInput: function() {
+			this.newTodoItem = ""
+		}
+	}
+}
+```
+```
+<style scoped>
+input:focus {
+	outline: none;
+}
+.inputBox {
+	background: #fff;
+	height: 50px;
+	line-height: 50px;
+	border-radius: 5px;
+}
+.inputBox input {
+	border-style: none;
+	font-size: .9rem;
+}
+.addContainer {
+	float: right;
+	background: linear-gradient(to right, #6478fb, #8763fb);
+	display: block;
+	width: 3rem;
+	border-radius: 0 5px 5px 0;
+}
+.addBtn {
+	color: #fff;
+	vertical-align: middle;
+}
+</style>
+```
+
+4. 수정한 마크업과 css 적용이 되었고 기능도 제대로 작동한 것을 확인할 수 있다
+![2-5-1](./_images/2-5-1.png)<br />
+<br />
+
+5. **인풋박스 입력 후, 엔터를 누르면 엔터버튼을 클릭한 것과 동일한 효과**를 주려고 한다.
+	- 인풋박스에 v-on:keyup.enter 이벤트 기능을 추가하고 addTodo 메서드 함수를 연결해준다
+```
+<template>
+	<div class="inputBox shadow">
+		<input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo">
+		<!-- <button v-on:click="addTodo">add</button> -->
+		<span class="addContainer" v-on:click="addTodo">
+			<i class="fas fa-plus addBtn"></i>
+		</span>
+	</div>
+</template>
+```
