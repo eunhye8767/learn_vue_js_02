@@ -381,3 +381,125 @@ input:focus {
 	</div>
 </template>
 ```
+
+<br />
+
+### 2.6. TodoList 컴포넌트의 할 일 목표 표시 기능 구현
+1. **created 뷰 라이프사이클 적용**
+	- 뷰 라이프사이클은 created, Mounted, updated, destoryed 되는 주요 4개의 라이프사이클이 있고
+	beforeUpdate, befoCreate 등 총 8개~10개정도 있다
+	- **created : 인스턴스가 생성되자마자 호출되는 라이프사이클 훅**을 말한다
+	- 훅 : 훅은 생성되는 시점에 로직이 실행된다는 의미.
+```
+export default {
+	created: function() {
+		
+	}
+}
+```
+<br />
+
+2. created 뷰 라이프사이클에 log를 적용해본다
+	- 인스턴스가 생성되지마자 log 되는 것을 확인할 수 있다
+```
+export default {
+	created: function() {
+		console.log('created');
+	}
+}
+```
+![2-6-1](./_images/2-6-1.png)<br />
+<br />
+
+3. created 라이프사이클에서 로컬스토리지에 저장된 것을 log로 확인한다
+	- log에 localStorage.key(i) 정보를 가져오게 되어 있는데 브라우저에 접속하면 로컬스토리지에 저장된 정보들을 보여준다
+	- loglevel:webpack-dev-server는 웹팩 데브 서버로 프로포타이핑을 하기 때문에 자동으로 주입되는 것, 신경쓰지 않아도 된다
+```
+export default {
+	data: function() {
+		return {
+			todoItems: []
+		}
+	},
+	created: function() {
+		if ( localStorage.length > 0 ) {
+			for(var i=0; i < localStorage.length; i++) {
+				console.log(localStorage.key(i));
+			}
+		}
+	}
+}
+```
+![2-6-2](./_images/2-6-2.png)<br />
+<br />
+
+4. created 라이프사이클에서 로컬스토리지에 저장된 것을 TodoList로 가져온다
+	- 로컬스토리지에서 가져오는 정보를 담을 data 속성에서 todoItems 빈 배열 객체를 만든다
+	- created 라이프사이클 훅에서 로컬스토리지의 정보를 todoItems에 적용한다(=넣어준다)(push)
+```
+export default {
+	data: function() {
+		return {
+			todoItems: []
+		}
+	},
+	created: function() {
+		if ( localStorage.length > 0 ) {
+			for(var i=0; i < localStorage.length; i++) {
+				this.todoItems.push(localStorage.key(i));
+			}
+		}
+	}
+}
+```
+<br />
+
+5. 뷰 개발자 도구에서 보면 가져온 todoItems 정보들을 TodoList 컴포넌트에 담겨있는 것을 확인할 수 있다
+![2-6-3](./_images/2-6-3.png)<br />
+<br />
+
+6. loglevel:webpack-dev-server 을 제거하는 코드를 적용한다.<br />
+	- for문 안에 if으로 조건을 걸어준다.
+	- 조건을 준 후에 브라우저에서 확인해보면 뷰 컴포넌트에서 webpack-dev-server 관련 정보가 제거된 것을 확인할 수 있다
+```
+export default {
+	data: function() {
+		return {
+			todoItems: []
+		}
+	},
+	created: function() {
+		// 로컬스토리지에 저장된 것을 가져온다
+		if ( localStorage.length > 0 ) {
+			for(var i=0; i < localStorage.length; i++) {
+				if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+					this.todoItems.push(localStorage.key(i));
+				}
+			}
+		}
+	}
+}
+```
+![2-6-4](./_images/2-6-4.png)<br />
+<br />
+
+7. data - todoItems 에 저장된 정보를 화면에 출력해준다
+	- 리스트(li) 영역에 v-for문을 사용한다
+	- v-for="todoItem in todoItems"<br />
+	(data todoItems 기준)
+	- **v-bind:key를 입력**해준다<br />
+	key 가 중복되지 않는 선에서 key가 유일하기 때문에 **v-for문의 성능을 가속하시키는 장점**이 있다
+	- 데이터바인딩 문법으로 {{ todoItem }} 입력하여 화면에 출력시킨다
+	```
+	<template>
+		<div>
+			<ul>
+				<li v-for="todoItem in todoItems" v-bind:key="todoItem">
+					{{ todoItem }}
+				</li>
+			</ul>
+		</div>
+	</template>
+	```
+![2-6-5](./_images/2-6-5.png)<br />
+<br />
