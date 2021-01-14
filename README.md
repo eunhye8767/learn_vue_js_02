@@ -503,3 +503,103 @@ export default {
 	```
 ![2-6-5](./_images/2-6-5.png)<br />
 <br />
+
+### 2.7. TodoList 컴포넌트 UI 스타일링
+1. UI 스타일링 관련 CSS 적용
+```
+<style>
+ul {
+	list-style-type: none;
+	padding-left: 0px;
+	margin-top: 0;
+	text-align: left;
+}
+li {
+	display: flex;
+	min-height: 50px;
+	height: 50px;
+	line-height: 50px;
+	margin: .5rem 0;
+	padding: 0 .9rem;
+	background: #fff;
+	border-radius: 5px;
+}
+.removeBtn {
+	margin-left: auto;
+	color: #de4343;
+}
+.checkBtn {
+	line-height: 45px;
+	color: #62acde;
+	margin-right: 5px;
+}
+.checkBtnCompleted {
+	color: #b3adad;
+}
+.textCompleted {
+	text-decoration: line-through;
+	color: #b3adad;
+}
+</style>
+```
+<br />
+
+2. 리스트(li)에 삭제 버튼을 추가한다
+```
+<template>
+	<div>
+		<ul>
+			<li v-for="todoItem in todoItems" v-bind:key="todoItem" class="shadow">
+				{{ todoItem }}
+				<span class="removeBtn">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+![2-7-1](./_images/2-7-1.png)<br />
+<br />
+
+3. 추가한 버튼에 v-on:click 이벤트를 연결하고<br />
+연결한 이벤트의 메서드 함수도 추가한다
+```
+<template>
+	<div>
+		<ul>
+			<li v-for="todoItem in todoItems" v-bind:key="todoItem" class="shadow">
+				{{ todoItem }}
+				<span class="removeBtn" v-on:click="removeTodo">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+```
+export default {
+	data: function() {
+		return {
+			todoItems: []
+		}
+	},
+	methods: {
+		removeTodo: function() {
+			
+		}
+	},
+	created: function() {
+		if ( localStorage.length > 0 ) {
+			for(var i=0; i < localStorage.length; i++) {
+				if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+					this.todoItems.push(localStorage.key(i));
+				}
+				// console.log(localStorage.key(i));
+			}
+		}
+	}
+}
+```
+<br />
