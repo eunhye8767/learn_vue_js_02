@@ -667,3 +667,254 @@ export default {
 	},
 	```
 <br />
+
+### 2.9. TodoList 컴포넌트의 할 일 완료 기능 구현
+체크 박스를 추가하고 체크 했을 때의 효과도 적용하려고 한다( = 토글 컴포넌트 기능 구현)<br />
+<br />
+
+1. 체크버튼을 추가하고 toggleComplate 메서드 클릭이벤트를 연결한다<br />
+class="checkBtn fas fa-check" v-on:click="toggleComplate"
+```HTML
+<template>
+	<div>
+		<ul>
+			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+				<i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
+				{{ todoItem }}
+				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+```JAVASCRIPT
+export default {
+	data: function() {
+	},
+	methods: {
+		toggleComplate: function() {
+			
+		}
+	},
+}
+```
+<br />
+
+2. [ TodoInput.vue ] setItem에서 key, value를 구분하지 않고 넣은 코드를 수정한다
+	- 변수 obj를 만들고 obj 안에<br />
+	텍스트 값과 체크를 했는 지? 안했는 지의 블린 값을 obj 적용한다
+	- 적용한 obj를 setItem 의 value 값에 적용한다
+	- stringify : 자바스크립트 obj(객체)를 스트링으로 변환해주는 API<br />
+	스트링으로 변환을 해야 로컬스토리지에 value 값이 적용된다.
+```JAVASCRIPT
+methods: {
+	addTodo: function() {
+		var obj = {
+			completed: false,
+			item: this.newTodoItem,
+		};
+		localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+		this.clearInput();
+	},
+	clearInput: function() {
+		this.newTodoItem = ""
+	}
+}
+```
+![2-9-1](./_images/2-9-1.png)<br />
+<br />
+
+3. [ TodoInput.vue ] input에 값이 있을 경우에만 addTodo 메서드 함수가 실행되게 코드를 보완한다.
+	- if문으로 조건을 적용해준다
+	- 조건 : this.newTodoItem !== '' <br />
+	(!== 는 false를 의미한다. '' 값이 없을 때의 반대는 값이 있을 떄)
+```JAVASCRIPT
+methods: {
+	addTodo: function() {
+		if(this.newTodoItem !== '') {
+			var obj = {
+				completed: false,
+				item: this.newTodoItem,
+			};
+			// console.log(this.newTodoItem);
+			// 저장하는 로직
+			localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+			this.clearInput();
+		}
+	},
+}
+```
+<br />
+
+4. [ TodoList.vue ] TodoInput.vue 파일에서 로컬스토리지에 저장할 때의 value 값을 수정하였기 때문에 TodoList.vue 파일에서 코드를 수정해줘야 한다.
+	- 기존 코드 주석 처리 :<br />
+	this.todoItems.push(localStorage.key(i));
+	- localStorage.key(i) 값을 getItem 으로 받아오고 받아온 정보를 log로 출력한다
+	- key 값을 getItem 으로 받아와서 log창에 value 값이 출력된 것을 확인할 수 있다
+	- TodoInput.vue 파일에서 setItem() 불러올 때 stringify() 문자열로 변환했기 때문에 동일하게 문자열(string)로 값을 받아오게 된다.<br />
+	console.log(typeof localStorage.getItem(localStorage.key(i)));
+```
+created: function() {
+	if ( localStorage.length > 0 ) {
+		for(var i=0; i < localStorage.length; i++) {
+			if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+				// this.todoItems.push(localStorage.key(i));
+
+				console.log(localStorage.getItem(localStorage.key(i)));
+			}
+		}
+	}
+}
+```
+![2-9-2](./_images/2-9-2.png)<br />
+<br />
+
+5. 스트링(문자열)으로 받아온 것을 오브젝트(객체)로 변화시킨다
+	- parse() 을 사용하여 문자열 -> 객체로 변환한다
+```JAVASCRIPT
+created: function() {
+	if ( localStorage.length > 0 ) {
+		for(var i=0; i < localStorage.length; i++) {
+			if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+				// this.todoItems.push(localStorage.key(i));
+
+				console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
+			}
+		}
+	}
+}
+```
+![2-9-3](./_images/2-9-3.png)<br />
+<br />
+
+6. 불러온 정보를 화면에 출력한다
+```JAVASCRIPT
+created: function() {
+	if ( localStorage.length > 0 ) {
+		for(var i=0; i < localStorage.length; i++) {
+			if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+				this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+			}
+		}
+	}
+}
+```
+![2-9-4](./_images/2-9-4.png)<br />
+<br />
+
+7. 객체의 정보 중 item 값만 보이게 수정을 한다
+```HTML
+<template>
+	<div>
+		<ul>
+			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+				<i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
+				{{ todoItem.item }}
+				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+![2-9-5](./_images/2-9-5.png)<br />
+<br />
+
+8. 수정한 {{ todoItem.item }} 부분을 span으로 감싸고 css를 적용해준다
+```HTML
+<template>
+	<div>
+		<ul>
+			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+				<i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
+				<span class="textCompleted">{{ todoItem.item }}</span>
+				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+<br />
+
+9. i.checkBtn 과 span.textCompleted 에 v-bind로 클래스 조건을 걸어준다<br />
+	- checkBtn 경우, completed 값이 true면 checkBtnCompleted 클래스가 추가 된다
+	- span 경우, completed 값이 true면 todoItems.completed 클래스가 추가 된다
+```HTML
+<template>
+	<div>
+		<ul>
+			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+				<i class="checkBtn fas fa-check" v-bind:class="{checkBtnCompleted: todoItem.completed}" v-on:click="toggleComplate"></i>
+				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+<br />
+
+10. completed 값을 true 또는 false 로 변경하기 위해 checkBtn 클릭 시 todoItem과 Index 정보를 받아온다
+	- log 창에서 클릭한 checkBtn의 todoItem 정보를 확인할 수 있다
+```HTML
+<template>
+	<div>
+		<ul>
+			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+				<i class="checkBtn fas fa-check" 
+					v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+					v-on:click="toggleComplate(todoItem, index)"></i>
+				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+```JAVASCRIPT
+methods: {
+	toggleComplate: function(todoItem, index) {
+		console.log(todoItem);
+	}
+},
+```
+![2-9-6](./_images/2-9-6.png)<br />
+<br />
+
+11. todoItem의 completed 값을 클릭할 때마다 바꿔준다
+	- 로컬스토리지의 값은 변경되지 않는다.
+```JAVASCRIPT
+methods: {
+	toggleComplate: function(todoItem, index) {
+		todoItem.completed = !todoItem.completed;
+	}
+},
+```
+![2-9-7](./_images/2-9-7.png)<br />
+<br />
+
+12. 로컬스토리지의 completed 값도 변경한다.<br />
+로컬스토리지에서는 업데이트 해주는 API가 없기 때문에 삭제 후 추가해야 한다.
+```JAVASCRIPT
+methods: {
+	toggleComplate: function(todoItem, index) {
+		todoItem.completed = !todoItem.completed;
+		
+		// 로컬스토리지의 데이터를 갱신
+		// 기존의 정보를 삭제한다 (로컬스토리지에서는 업데이트 해주는 기능이 없다)
+		localStorage.removeItem(todoItem.item);
+		localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	}
+},
+```
+![2-9-8](./_images/2-9-8.png)<br />
+<br />

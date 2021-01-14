@@ -17,10 +17,16 @@ export default {
 	},
 	methods: {
 		addTodo: function() {
-			// console.log(this.newTodoItem);
-			// 저장하는 로직
-			localStorage.setItem(this.newTodoItem, this.newTodoItem);
-			this.clearInput();
+			if(this.newTodoItem !== '') {
+				var obj = {
+					completed: false,
+					item: this.newTodoItem,
+				};
+				// console.log(this.newTodoItem);
+				// 저장하는 로직
+				localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+				this.clearInput();
+			}
 		},
 		clearInput: function() {
 			this.newTodoItem = ""
