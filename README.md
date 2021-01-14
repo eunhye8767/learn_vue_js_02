@@ -603,3 +603,67 @@ export default {
 }
 ```
 <br />
+
+### 2.8. TodoList 컴포넌트 할 일 삭제 기능 구현
+1. removeBtn을 클릭했을 때 해당 리스트(li)를 삭제하려고 한다
+2. 뷰의 v-for문은 내장하는 index 값이 있다.<br />
+v-for문에서 나오는 값이 몇 개이던 가에 index. 순서를 지정해주는 것이 있다.
+3. v-for 문에서 todoItem과 index 값을 받고<br />
+그 값을 메서드에 넘길 수 있다.<br /> 
+즉, removeBtn 메서드 함수에서 todoItem과 index 값을 받아올 수 있다
+```
+<template>
+	<div>
+		<ul>
+			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+				{{ todoItem }}
+				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+<br />
+
+4. 받아온 값을 removeBtn 메서드 함수에도 적용하고 log로 확인해본다
+```
+export default {
+	methods: {
+		removeTodo: function(todoItem, index) {
+			console.log(todoItem, index);
+		}
+	},
+}
+```
+![2-8-1](./_images/2-8-1.png)<br />
+<br />
+
+5. removeBtn을 클릭했을 때 받아온 todoItem과 Index를 이용해 삭제 기능을 구현한다
+	1. **로컬스토리지에서 removeItem() API를 이용하여 해당 아이템을 삭제**한다
+		- TodoInput.vue 에서 로컬스토리지에 정보를 추가할 때, Key와 Value 값을 this.newTodoItem 로 
+		동일하게 적용하였기 때문에 받아온 todoItem을 removeItem API에 넣어준다
+		- 버튼을 클릭하면 로컬스토리지에서 해당 부분이 삭제되는 것을 확인할 수 있다		
+	```
+	localStorage.removeItem(todoItem);
+	```
+	2. 로컬스토리지에서 삭제 기능을 구현한 후, (화면 영역) 리스트(li) 영역 삭제 기능도 구현한다
+		- 로컬스토리지 영역과 화면 영역을 별개라고 생각하면 된다
+		- 화면 영역은 스크립트로 삭제 기능을 구현해야 한다
+
+	3. **리스트(li) 영역은 splice() 를 이용해 삭제**한다
+		- splice() 는 기존의 배열을 변경하여 지워준다 ( => slice는 기존 배열을 둔 상태에서 지워준다)
+		```
+		this.todoItems.splice(index, 1);
+		```
+	4. 따라서, removeBtn 메서드 함수를 아래와 같이 적용한다
+	```
+	methods: {
+		removeTodo: function(todoItem, index) {
+			localStorage.removeItem(todoItem);
+			this.todoItems.splice(index, 1);
+		}
+	},
+	```
+<br />
