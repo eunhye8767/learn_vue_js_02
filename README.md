@@ -1213,7 +1213,7 @@ methods: {
 ![3-1-3](./_images/3-1-3.png)<br />
 <br />
 
-### 3.2. 할 일 삭제 기능
+### 3.3. 할 일 삭제 기능
 1. App.vue 에서 TodoList 컴포넌트에 v-on 디렉티브를 이용해 이벤트를 연결한다 
 	- removeItem 이 발생했을 때, removeOneItem 이라는 메서드 함수가 실행
 ```HTML
@@ -1258,3 +1258,79 @@ methods: {
 }
 ```
 <br />
+
+### 3.4. 할 일 완료 기능
+1. App.vue 의 메서드 toggleOneItem을 생성한다
+```JAVASCRIPT
+// App.vue
+toggleOneItem: function(todoItem, index) {
+      
+}
+```
+<br />
+
+2. TodoList.vue 의 toggleComplate 메서드에 적용되었던 코드를<br />
+App.vue 에 그대로 적용한다.
+```JAVASCRIPT
+// App.vue
+toggleOneItem: function(todoItem, index) {
+	todoItem.completed = !todoItem.completed;
+	localStorage.removeItem(todoItem.item);
+	localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+}
+```
+<br />
+
+3. TodoList.vue 의 toggleComplate 메서드에 이벤트를 발생시킨다
+```JAVASCRIPT
+// TodoList.vue
+methods: {
+	toggleComplate: function(todoItem, index) {
+		this.$emit('toggleItem', todoItem, index);
+	}
+},
+```
+<br />
+
+4. App.vue 에서 TodoList 컴포넌트에 v-on 디렉티브로 이벤트를 연결한다
+```HTML
+<template>
+  <div id="app">
+    <TodoHeader></TodoHeader>
+    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
+    <TodoList 
+      v-bind:propsdata="todoItems" 
+      v-on:removeItem="removeOneItem"
+      v-on:toggleItem="toggleOneItem"></TodoList>
+    <TodoFooter></TodoFooter>
+  </div>
+</template>
+```
+<br />
+
+5. TodoList.vue 에서 전달받은 todoItem 의 값을 그대로 받아 바꿔주는 것은<br />
+**옮지 않은 방법**으로 **App.vue에서 전달받은 todoItems 속성을 이용해 코드를 보완**한다.
+```JAVASCRIPT
+// 옮지 않은 방법
+methods: {
+	toggleOneItem: function(todoItem, index) {
+		todoItem.completed = !todoItem.completed;
+
+		// 로컬 스토리지의 데이터 갱싱
+		localStorage.removeItem(todoItem.item);
+		localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	}
+},
+```
+```JAVASCRIPT
+// 보완
+methods: {
+	toggleOneItem: function(todoItem, index) {
+		this.todoItems[index].completed = !this.todoItems[index].completed
+
+		// 로컬 스토리지의 데이터 갱싱
+		localStorage.removeItem(todoItem.item);
+		localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	}
+},
+```
