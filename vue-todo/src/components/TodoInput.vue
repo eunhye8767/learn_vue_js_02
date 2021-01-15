@@ -18,13 +18,7 @@ export default {
 	methods: {
 		addTodo: function() {
 			if(this.newTodoItem !== '') {
-				var obj = {
-					completed: false,
-					item: this.newTodoItem,
-				};
-				// console.log(this.newTodoItem);
-				// 저장하는 로직
-				localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+				this.$emit('addTodoItem', this.newTodoItem)
 				this.clearInput();
 			}
 		},

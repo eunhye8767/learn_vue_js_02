@@ -1102,3 +1102,113 @@ export default {
 8. 여기까지 수정 한 후, 브라우저에서 확인을 해보면 아래와 같이 제대로 동작하는 것을 확인할 수 있다.
 ![3-1-2](./_images/3-1-2.png)<br />
 <br />
+
+### 3.2. 할 일 추가 기능
+TodoInput 에서 add 한 기능과 todoItems 를 연동시키려고 한다.<br />
+<br />
+
+1. 현재 TodoInput.vue 에서 코드를 확인해보면
+	- add 버튼을 클릭할 때, newTodoItem 을 이용하여 추가하고 있다.
+	- 다시 말하면, add 할 때 todoItems에 추가하는 기능을 구현시켜주면 된다.
+<br />
+
+2. [ App.vue ] TodoInput 컴포넌트 태그에 이벤트 발생을 적용시킨다.
+```HTML
+<TodoInput v-on:하위 컴포넌트에서 발생시킨 이벤트 이름="현재 컴포넌트의 메서드 이름"></TodoInput>
+```
+<br />
+
+3. [ App.vue ] TodoInput 컴포넌트 태그에 적용할 메서드를 추가한다
+	- 추가 메서드 이름 : addOneItem
+```JAVASCRIPT
+methods: {
+	addOneItem: function() {
+		
+	}
+},
+```
+<br />
+
+4. TodoInput.vue 에서 로컬스토리지로 정보를 추가하는 코드를 App.vue 에 적용한다.
+	- localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+```JAVASCRIPT
+methods: {
+	addOneItem: function() {
+		var obj = {
+			completed: false,
+			item: this.newTodoItem,
+		};
+		localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+	}
+},
+```
+<br />
+
+5. [ TodoInput.vue ] newTodoItem 값을 상위로 전달하기 위해 이벤트 $emit을 이용한다
+	- this.$emit('이벤트 이름', 인자1, 인자2, ..)
+```JAVASCRIPT
+methods: {
+	addTodo: function() {
+		if(this.newTodoItem !== '') {
+			this.$emit('addTodoItem', this.newTodoItem)
+			this.clearInput();
+		}
+	},
+}
+```
+<br />
+
+6. 전달받은 addTodoItem 이벤트 $emit 을 App.vue 파일에 연결한다
+	- v-on:하위 컴포넌트에서 발생시킨 이벤트 이름="현재 컴포넌트의 메서드 이름"
+```HTML
+<template>
+  <div id="app">
+    <TodoHeader></TodoHeader>
+    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
+    <TodoList v-bind:propsdata="todoItems"></TodoList>
+    <TodoFooter></TodoFooter>
+  </div>
+</template>
+```
+<br />
+
+7. 로직을 정리하면,
+	1. TodoInput.vue 에서 addTodo 버튼이 실행되면
+	2. 메서드 addTodo 동작이 작동한다
+	3. this.$emit 에서 addTodoItem 이 작동을 하고 <br />
+	this.newTodoItem 이 App.vue로 전달합니다
+	4. App.vue 에서 addTodoItem 작동으로 addOneItem 이벤트가 실행됩니다
+	
+8. TodoInput.vue 에서 전달받은 this.newTodoITem 을 App.vue 파일에서 addOneItem: function(매개변수) 로 받아 실행시킨다
+	- addOneItem에서 매개변수 todoItem 으로 받는다
+	- this.newTodoItem ==> todoItem 으로 수정하여 <br />
+	TodoInput.vue에서 전달받은 값을 적용한다
+```JAVASCRIPT
+methods: {
+	addOneItem: function(todoItem) {
+		var obj = {
+			completed: false,
+			item: todoItem,
+		};
+		localStorage.setItem(todoItem, JSON.stringify(obj));
+	}
+},
+```
+<br />
+
+9. App.vue 의 data - todoItems 속성 배열에도 추가되게 코드 보완
+	- input 에 입력하면 자동으로 아래 리스트에 내용이 추가된다
+```JAVASCRIPT
+methods: {
+	addOneItem: function(todoItem) {
+		var obj = {
+			completed: false,
+			item: todoItem,
+		};
+		localStorage.setItem(todoItem, JSON.stringify(obj));
+		this.todoItems.push(obj);
+	}
+},
+```
+![3-1-3](./_images/3-1-3.png)<br />
+<br />
