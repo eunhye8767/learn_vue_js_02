@@ -1334,3 +1334,47 @@ methods: {
 	}
 },
 ```
+<br />
+
+### 3.5. 할 일 모두 삭제 기능
+1. TodoFooter.vue 에 적용된 clearTodo 메서드에 적용한 코드를<br />
+App.vue에서 clearAllItem 메서드 함수를 만들고 여기에 코드를 적용한다
+```JAVASCRIPT
+methods: {
+	clearAllItem: function() {
+		localStorage.clear();
+	}
+},
+```
+<br />
+
+2. TodoFooter.vue 의 clearTodo 메서드에 이벤트 $emit 을 적용한다
+```JAVASCRIPT
+methods: {
+	clearTodo: function() {
+		this.$emit('clearAll');
+	}
+}
+```
+<br />
+
+3. App.vue 의 TodoFooter 컴포넌트에 v-on 디렉티브를 이용해<br />
+$emit 으로 만든  이벤트과 App.vue의 clearAllItem 이벤트를 연결한다.
+```HTML
+<TodoFooter v-on:clearAll="clearAllItem"></TodoFooter>
+```
+
+4. 위 코드 대로 적용을 하면 로컬스토리지의 내역만 삭제되고
+리스트에 적용된 todoItems 는 그대로 보여진다.
+
+5. App.vue 의 clearTodo 메서드 함수 todoItems 삭제 코드도 적용한다
+	- this.todoItems = []<br />
+	todoItems를 빈 배열로 초기화 시키다는 뜻.
+```JAVASCRIPT
+methods: {
+	clearTodo: function() {
+		this.$emit('clearAll');
+		this.todoItems = [];
+	}
+}
+```
