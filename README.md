@@ -918,3 +918,62 @@ methods: {
 ```
 ![2-9-8](./_images/2-9-8.png)<br />
 <br />
+
+### 2.10. TodoFooter 컴포넌트 구현
+Clear All 버튼을 생성하여 클릭했을 때 Todo List 삭제를 하려고 한다<br />
+<br />
+
+1. 마크업/CSS 작업
+```HTML
+<template>
+	<div class="clearAllContainer">
+		<span class="clearAllBtn">Clear All</span>
+	</div>
+</template>
+```
+```CSS
+.clearAllContainer {
+	width: 8.5rem;
+	height: 50px;
+	line-height: 50px;
+	background-color: #fff;
+	border-radius: 5px;
+	margin: 0 auto;
+}
+.clearAllBtn {
+	color: #e20302;
+	display: block;
+}
+```
+<br />
+
+2. clearAll 버튼에 v-on:click 이벤트를 적용하여 clearTodo 메서드를 연결한다
+```HTML
+<template>
+	<div class="clearAllContainer">
+		<span class="clearAllBtn" v-on:click="clearTodo">Clear All</span>
+	</div>
+</template>
+```
+```JAVASCRIPT
+export default {
+	methods: {
+		clearTodo: function() {
+			
+		}
+	}
+}
+```
+<br />
+
+3. 로컬 스토리지의 내역을 삭제한다 <br />
+clear() 로 로컬 스토리지의 삭제를 한다
+```JAVASCRIPT
+export default {
+	methods: {
+		clearTodo: function() {
+			localStorage.clear();
+		}
+	}
+}
+```

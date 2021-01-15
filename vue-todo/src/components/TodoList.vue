@@ -4,7 +4,7 @@
 			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem.item" class="shadow">
 				<i class="checkBtn fas fa-check" 
 					v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-					v-on:click="toggleComplate(todoItem, index)"></i>
+					v-on:click="toggleComplate(todoItem)"></i>
 				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
 				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
 					<i class="fas fa-trash-alt"></i>
@@ -34,7 +34,7 @@ export default {
 			// 해당 인덱스 번호부터 1번째 자리까지 삭제
 			this.todoItems.splice(index, 1);
 		},
-		toggleComplate: function(todoItem, index) {
+		toggleComplate: function(todoItem) {
 			// console.log(todoItem);
 			todoItem.completed = !todoItem.completed;
 			
