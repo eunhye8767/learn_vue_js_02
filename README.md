@@ -977,3 +977,128 @@ export default {
 	}
 }
 ```
+<br /><br /><br />
+
+## 3. Todo App - 애플리케이션 구조 개선하기
+### 3.1. [리팩토링] 할 일 목록 표시 기능
+1. 애플리케이션 구조를 개선한다 (아래 이미지 참고)<br />
+	- App 컴포넌트를 Container로 생각하면 된다
+![3-1-1](./_images/3-1-1.png)<br />
+<br />
+
+2. 각각의 컴포넌트에서 했던 로직들을 App.vue 파일에 끌어온다
+
+3. 리스트를 먼저 뿌려보려고 한다. <br />
+[ TodoList.vue ] 에서 created: function {} 코드를 [ App.vue ]에 적용한다
+```JAVASCRIPT
+// App.vue
+export default {
+  created: function() {
+    if ( localStorage.length > 0 ) {
+      for(var i=0; i < localStorage.length; i++) {
+        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+        }
+      }
+    }
+  },
+  components: {
+    // 컴포넌트 태그명 : 컴포넌트 내용
+    'TodoHeader' : TodoHeader,
+    'TodoInput' : TodoInput,
+    'TodoList' : TodoList,
+    'TodoFooter' : TodoFooter,
+  }
+}
+```
+<br />
+
+4. created 코드를 App.vue 로 적용한 후에<br />
+todoItems 정보를 담을 data 속성을 App.vue 파일에 적용을 하고
+TodoList.vue 에서는 data - todoItems 속성을 삭제한다.
+```JAVASCRIPT
+export default {
+  data: function() {
+    return {
+      todoItems: [],
+    }
+  },
+  created: function() {
+    if ( localStorage.length > 0 ) {
+      for(var i=0; i < localStorage.length; i++) {
+        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+        }
+      }
+    }
+  },
+  components: {
+    // 컴포넌트 태그명 : 컴포넌트 내용
+    'TodoHeader' : TodoHeader,
+    'TodoInput' : TodoInput,
+    'TodoList' : TodoList,
+    'TodoFooter' : TodoFooter,
+  }
+}
+```
+<br />
+
+5. [ App.vue ] 에 todoItems 정보가 저장이 된다.<br />
+저장된 정보를 TodoList에 넘겨줘야 한다 (props)
+```HTML
+// App.vue
+<TodoList v-bind:내려보낼 프롭스 속성이름="현재 위치의 컴포넌트 데이터속성"></TodoList>
+```
+따라서 위의 규칙의 맞게 TodoList v-bind 연결한다<br />
+내려보낼 프롭스 속성이름을 propsdata 라고 지정한다
+```HTML
+<TodoList v-bind:propsdata="todoItems"></TodoList>
+```
+<br />
+
+6. [ App.vue ] 에서 프롭스 이름을 설정한 후,
+[ TodoList.vue ]에서 프롭스 정보를 전달 받아야 하기 때문에
+해당 파일에서 프롭스 정보를 적용한다
+```JAVASCRIPT
+// TodoList.vue
+export default {
+	props: ['propsdata'],
+	methods: {
+		removeTodo: function(todoItem, index) {
+			localStorage.removeItem(todoItem);
+			this.todoItems.splice(index, 1);
+		},
+		toggleComplate: function(todoItem) {
+			todoItem.completed = !todoItem.completed;
+			localStorage.removeItem(todoItem.item);
+			localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+		}
+	},
+}
+```
+<br />
+
+7. propsdata 를 전달 받았기 때문에 TodoList.vue에서 v-for문을 수정한다
+	- v-for문에서 todoItems -> propsdata
+```HTML
+<template>
+	<div>
+		<ul>
+			<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+				<i class="checkBtn fas fa-check" 
+					v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+					v-on:click="toggleComplate(todoItem)"></i>
+				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+					<i class="fas fa-trash-alt"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</template>
+```
+<br />
+
+8. 여기까지 수정 한 후, 브라우저에서 확인을 해보면 아래와 같이 제대로 동작하는 것을 확인할 수 있다.
+![3-1-2](./_images/3-1-2.png)<br />
+<br />
