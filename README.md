@@ -1212,3 +1212,49 @@ methods: {
 ```
 ![3-1-3](./_images/3-1-3.png)<br />
 <br />
+
+### 3.2. 할 일 삭제 기능
+1. App.vue 에서 TodoList 컴포넌트에 v-on 디렉티브를 이용해 이벤트를 연결한다 
+	- removeItem 이 발생했을 때, removeOneItem 이라는 메서드 함수가 실행
+```HTML
+// App.vue
+<template>
+  <div id="app">
+    <TodoHeader></TodoHeader>
+    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
+    <TodoList v-bind:propsdata="todoItems" v-on:removeItem="removeOneItem"></TodoList>
+    <TodoFooter></TodoFooter>
+  </div>
+</template>
+```
+```JAVASCRIPT
+methods: {
+	removeOneItem: function() {
+
+	}
+},
+```
+<br />
+
+2. TodoList.vue 의 removeTodo 메서드 함수에서<br />
+매개변수로 받은 todoItem, Index 를 $emit 으로 그대로 전달한다.
+```JAVASCRIPT
+methods: {
+	removeTodo: function(todoItem, index) {
+		this.$emit('removeItem', todoItem, index);
+	},
+},
+```
+<br />
+
+3. TodoList.vue 에 있었던 로컬스토리지에 관한 코드는 App.vue 의 removeOneItem 메서드에 적용한다
+	- localStorage.removeItem(todoItem.item) 경우 특정 key 값을 적용해야 remove 된다.
+```JAVASCRIPT
+methods: {
+	removeOneItem: function(todoItem, index) {
+		localStorage.removeItem(todoItem.item);
+		this.todoItems.splice(index, 1);
+	}
+}
+```
+<br />

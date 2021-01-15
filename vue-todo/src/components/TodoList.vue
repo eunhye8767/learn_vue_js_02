@@ -19,15 +19,7 @@ export default {
 	props: ['propsdata'],
 	methods: {
 		removeTodo: function(todoItem, index) {
-			// console.log('remove items');
-			// console.log(todoItem, index);
-			
-			// 로컬스토리지의 정보 삭제
-			localStorage.removeItem(todoItem);
-			
-			// 화면 영역 li 삭제
-			// 해당 인덱스 번호부터 1번째 자리까지 삭제
-			this.todoItems.splice(index, 1);
+			this.$emit('removeItem', todoItem, index);
 		},
 		toggleComplate: function(todoItem) {
 			// console.log(todoItem);
