@@ -1393,4 +1393,142 @@ TodoList, TodoHeader 등은 프레젠테이션 역활로 사용했다
 (Vuex와 비슷한 설계 구조다)
 - **뷰와 리액트의 다른 점은 트랜지션, 애니메이션 효과를 라이브러리로 표현**할 수 있다
 
+<br /><br /><br />
+
+## 4. 사용자 경험 개선
+### 4.1. 모달 컴포넌트 등록
+- 모달 컴포넌트 공식문서 :<br />
+https://vuejs.org/v2/examples/modal.html
 <br />
+
+- **컴포넌트 모듈화 하는 방법**
+	1. 공식문서 - 모달 관련 마크업 복사
+	2. components 폴더에 common 폴더 생성 > Modal.vue 파일 생성
+		- 공통으로 사용하는 파일은 common 폴더를 생성하여 관리<br />
+		![4-1-1](./_images/4-1-1.png)<br />
+		<br />
+
+	3. vue 자동완성 기능 적용(template, script, style)<br />
+	복사한 마크업은 template에 적용한다<br />
+	![4-1-2](./_images/4-1-2.png)<br />
+	<br />
+
+	4. 공식문서의 style 값도 복사 > 붙여넣기 한다
+
+	5. TodoInput.vue 컴포넌트에 생성한 Modal.vue 컴포넌트를 하위 컴포넌트로 적용한다
+	```JAVASCRIPT
+	//TodoInput.vue
+	import Modal from './common/Modal.vue';
+
+	export default {
+		components: {
+			Modal: Modal,
+		}
+	}
+	```
+	<br />
+
+	6. 공식문서에서 #app 에 적용된 내용을 복사하여 TodoInput.vue에 적용한다<br />
+	그리고 Modal로 등록한 컴포넌트 이름으로 수정한다<br />
+	(공식문서 modal -> Modal)
+	```HTML
+	<template>
+		<div class="inputBox shadow">
+			<input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo">
+			<!-- <button v-on:click="addTodo">add</button> -->
+			<span class="addContainer" v-on:click="addTodo">
+				<i class="fas fa-plus addBtn"></i>
+			</span>
+			<Modal v-if="showModal" @close="showModal = false">
+				<h3 slot="header">custom header</h3>
+			</Modal>
+		</div>
+	</template>
+	```
+	![4-1-3](./_images/4-1-3.png)<br />
+	<br />
+
+	7. 공식문서에서 #app 에 적용된 data 속성도 동일하게 TodoInput.vue에 적용한다
+	```JAVASCRIPT
+	import Modal from './common/Modal.vue';
+
+	export default {
+		data: function() {
+			return {
+				showModal: false,
+			}
+		},
+		components: {
+			Modal: Modal,
+		}
+	}
+	```
+	![4-1-4](./_images/4-1-4.png)<br />
+	<br />
+
+	8. **slot 이란?**
+		- slot은 뷰의 유용한 기능
+		- slot은 Modal.vue에서 정의한 영역을 다시 정의할 수 있다
+			![4-1-5](./_images/4-1-5.png)<br />
+			<br />
+		- 공식문서에 따르면 you can use custom ~~ default content 이라는 영문 주석이 있는데 "너가 원하는 컨텐트를 이용해서 이 모달을 다시 재정의할 수 있다" 는 뜻이다.
+			```HTML
+			<!-- Modal 컴포넌트 -->
+			<Modal v-if="showModal" @close="showModal = false">
+				<!--
+					you can use custom content here to overwrite
+					default content
+				-->
+				<h3 slot="header">custom header</h3>
+			</Modal>
+			```
+		- TodoInput.vue 에서 slot 테스트
+			1. TodoInput.vue에서 h3 내용을 경고로 수정한다
+			```HTML
+			<Modal v-if="showModal" @close="showModal = false">
+				<h3 slot="header">경고</h3>
+			</Modal>
+			```
+			2. 현재 showModal: false 로 적용되어 있다<br />
+			즉, Modal v-if="showModal" 이 뜻은 false 이면 보이지 않는다는 뜻.<br />
+			**TodoInput.vue 에서 false 값을 True 바꿔주는 코드를 작성**한다<br />
+			this.showModal = !this.showModal
+			```
+			export default {
+				data: function() {
+					return {
+						newTodoItem: "",
+						showModal: false,
+					}
+				},
+				methods: {
+					addTodo: function() {
+						if(this.newTodoItem !== '') {
+							this.$emit('addTodoItem', this.newTodoItem)
+							this.clearInput();
+						} else {
+							this.showModal = !this.showModal
+						}
+					},
+				}
+			}
+			```
+
+			3. 아무 내용없이 클릭하면 해당 모달 창이 뜨는 것을 확인할 수 있다
+			![4-1-6](./_images/4-1-6.png)<br />
+			<br />
+			
+			4. 모달 창에서 header 부분이 바뀐 것을 확인할 수 있다
+				- Modal.vue 에서는 *default header 로 보여지는데*
+					![4-1-8](./_images/4-1-8.png)<br />
+					해당 페이지에서는 *경고로 바뀌었다* <br />
+					![4-1-7](./_images/4-1-7.png)<br />
+					<br />
+			5. **Modal.vue 에서 slot 으로 정의한 부분이 TodoInput.vue에서 slot 으로 정의한 부분으로 대체된다(바뀐다)**
+			![4-1-9](./_images/4-1-9.png)<br />
+			<br />
+
+			6. **slot name="header" 으로 등록하면 slot="header" 으로 동일한 이름을 지정하여 사용**하면 된다
+			<br />
+	
+
