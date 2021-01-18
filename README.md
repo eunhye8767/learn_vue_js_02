@@ -1662,3 +1662,101 @@ li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
 7. **List에 삭제**될 때는 **list-leave-active, list-leave-to 클래스가 삭제**된 것을 확인할 수 있다.
 ![4-2-4](./_images/4-2-4.png)<br />
 <br />
+<br />
+<br />
+
+## 5. ES6 for Vue.js
+### 5.1. ES6배경과 Babel 소개
+- **ES6 란?**
+	- ECMAScript 2015와 동일한 용어 (정확한 용어는 ECMAScript 2015)
+	- 2015년은 ES5(2009년)이래로 진행한 첫 메이저 업데이트가 승인된 해
+	- 최신 Front-End Framework인 React, Angular, Vue 에서 권고하는 언어 형식
+	- ES5에 비해 문법이 간결해져서 익숙해지면 코딩을 훨씬 편하게 할 수 있음
+<br />
+
+- **Babel(바벨)**
+	- https://babeljs.io/
+	- 구 버전 브라우저 중에서는 ES6의 기능을 지원하지 않는 브라우저가 있으므로 **transpiling(트랜스파일링)이 필요**
+	- *ES6의 문법을 각 브라우저의 호환 가능한 ES5로 변환하는 컴파일러*<br />
+		![5-1-1](./_images/5-1-1.png)<br />
+		<br />
+
+### 5.2. const & let 소개
+- const & let : 새로운 변수 선언 방식
+- **블록 단위 { } 로 변수의 범위가 제한**되었음
+- **const** : 한 번 선언한 값에 대해서 **변경할 수 없음**(상수 개념)
+	- const 예시 :<br /> 
+		![5-1-2](./_images/5-1-2.png)<br />
+		<br />
+
+- **let** : 한 번 선언한 값에 대해서 **다시 선언할 수 없음**
+	- let 예시 :<br />
+		![5-1-3](./_images/5-1-3.png)<br />
+		<br />
+
+### 5.3. [ES5의 주요특징] 변수 스코프와 호이스팅
+#### 5.3.1 변수의 Scope(스코프)
+- 기존 자바스크립트(ES5)는 { }에 상관없이 스코프가 설정됨
+- 스코프는 블록의 유효범위
+```JAVASCRIPT
+var sum = 0;
+for ( var i=1; i <= 5; i++ ) {
+	sum = sum + i;
+}
+console.log(sum);   // 15
+console.log(i);     // 6
+```
+<br />
+
+#### 5.3.2. Hoisting(호이스팅)
+- Hoisting이란 선언한 함수와 변수를 해석기가 가장 상단에 있는 것처럼 인식한다
+- js 해석기는 코드의 **라인 순서와 관계 없이 함수선언식과 변수를 위한 메모리 공간을 먼저 확보**한다.
+	- **함수선언식**
+		```JAVASCRIPT
+		function sum() {
+			// function statement
+			return 10 + 20
+		}
+		```
+	- 함수표현식
+		```JAVASCRIPT
+		var sum = function() {
+			// function expression
+			return 10 + 20;
+		}
+		```
+- 따라서, function a()와 var 는 코드의 최상단으로 **끌어 올려진 것(hoisted)**처럼 보인다
+	```JAVASCRIPT
+	function willBeOveridden() {
+		return 10;
+	}
+	willBeOveridden();      // 5
+	function willBeOveridden() {
+		return 5;
+	}
+	```
+
+- 아래와 같은 코드를 실행할 때 자바스크립트 해석기가 어떻게 코드 순서를 재조정할까?
+	```JAVASCRIPT
+	var sum = 5;
+  sum = sum + i;
+  function sumAllNumbers() {
+    //
+  }
+  var i = 10;
+	```
+	- 아래 코드 순서 
+	```JAVASCRIPT
+	// #1 - 함수 선언식과 변수 선언을 Hositing
+	var sum;
+	function sumAllNumbers() {
+    //
+	}
+	var i;
+
+	// #2 - 변수 대입 및 할당
+	sum = 5;
+	sum = sum + i;
+	i = 10;
+	```
+<br />
