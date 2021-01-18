@@ -1578,5 +1578,87 @@ https://vuejs.org/v2/examples/modal.html
 	```
 	<br />
 
+### 4.2. 트렌지션 소개 및 구현
+- 트렌지션 공식문서 :<br />
+https://vuejs.org/v2/guide/transitions.html
+- 트렌지션은 구현 관점, 사용자 관점에서 보는 것이다.
+	- 사용자 관점 : 애니메이션과 트렌지션, 간단한 임펙트를 뷰 프레임워크에서 바로바로 추가할 수 있다.
+	- 구현 관점 : transition classes (트랜지션 이름)에 따라서 구현이 된다<br />
+		https://vuejs.org/v2/guide/transitions.html#Transition-Classes
+<br />
+<br />
 
+**트렌지션 구현**<br />
+1. 공식문서(https://vuejs.org/v2/guide/transitions.html#List-Entering-Leaving-Transitions) 참고하여 list-item 효과 적용하기
+	- 트랜지션 : https://vuejs.org/v2/guide/transitions.html#CSS-Transitions
+	- 애니메이션 : https://vuejs.org/v2/guide/transitions.html#CSS-Animations
+<br />
 
+2. TodoList.vue 파일에 list-item 관련 css 적용한다
+```CSS
+/* TodoLIst.vue */
+
+/* 리스트 아이템 트렌지션 효과 */
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+```
+<br />
+
+3. 아래 그림처럼 List에 적용해야하기 때문에 transition-group 를 이용한다
+	- name : css와 연관된 네임이라고 보면 된다.<br />
+	.list-enter-active, .list-leave-active
+	- tag : 말 그대로 태그를 의미한다.<br />
+	즉, p태그에 트랜지션을 넣겠다는 뜻이다.
+	![4-2-1](./_images/4-2-1.png)<br />
+	<br />
+
+4. TodoList.vue에서 li 에 트렌지션 효과를 적용하기 위해
+li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
+```HTML
+<ul>
+	<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+		<i class="checkBtn fas fa-check" 
+			v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+			v-on:click="toggleComplate(todoItem, index)"></i>
+		<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+		<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+			<i class="fas fa-trash-alt"></i>
+		</span>
+	</li>
+</ul>
+```
+	- 위 코드에서 ul -> transition-group 변경
+```HTML
+<transition-group name="list" tag="ul">
+	<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+		<i class="checkBtn fas fa-check" 
+			v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+			v-on:click="toggleComplate(todoItem, index)"></i>
+		<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+		<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+			<i class="fas fa-trash-alt"></i>
+		</span>
+	</li>
+</transition-group>
+```
+<br />
+
+5. name은 클래스와 연관되어 있다.
+	- 공식문서 : https://vuejs.org/v2/guide/transitions.html#Transition-Classes
+	- 클래스 값을 적용할 때 Enter 와 Leave 그림 설명처럼<br>
+	-enter & -leave-to , -enter-to & -leave 로 동일한 값을 적용한다.
+	![4-2-2](./_images/4-2-2.png)<br />
+	<br />
+
+6. **List에 추가**될 때는 **list-enter-active, list-enter-to 클래스가 추가**된 것을 확인할 수 있다.
+![4-2-3](./_images/4-2-3.png)<br />
+<br />
+
+7. **List에 삭제**될 때는 **list-leave-active, list-leave-to 클래스가 삭제**된 것을 확인할 수 있다.
+![4-2-4](./_images/4-2-4.png)<br />
+<br />
