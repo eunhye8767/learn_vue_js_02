@@ -18,7 +18,7 @@
             </slot>
           </div>
 
-          <!-- 모달 푸터 -->
+          <!-- 모달 푸터 
           <div class="modal-footer">
             <slot name="footer">
               default footer
@@ -26,8 +26,8 @@
                 OK
               </button>
             </slot>
-          </div>
-          
+          </div> -->
+
         </div>
       </div>
     </div>

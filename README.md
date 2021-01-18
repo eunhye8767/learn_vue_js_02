@@ -1531,4 +1531,52 @@ https://vuejs.org/v2/examples/modal.html
 			6. **slot name="header" 으로 등록하면 slot="header" 으로 동일한 이름을 지정하여 사용**하면 된다
 			<br />
 	
+	9. Modal.vue 에서 footer 영역은 주석처리하고<br />
+	Header 영역에 닫기 버튼을 추가한다
+	```HTML
+	// TodoInput.vue
+	<template>
+		<div class="inputBox shadow">
+			<!-- Modal 컴포넌트 -->
+			<Modal v-if="showModal" @close="showModal = false">
+				<h3 slot="header">
+					경고
+					<i class="closeModalBtn fas fa-times"></i>
+				</h3>
+				<div slot="body">무언가를 입력하세요</div>
+				<div slot="footer">copyright</div>
+			</Modal>
+		</div>
+	</template>
+	```
+	```CSS
+	// TodoInput.vue
+	.closeModalBtn {
+		color: #42b983;
+	}
+	```
+	<br />
+
+	10. 모달 창에서 클릭했을 때의 이벤트를 적용한다
+		- **v-on:click 를 축약하면 @click**
+		- showModal = false 로 모달창을 닫는다.
+	```HTML
+	// TodoInput.vue
+	<template>
+		<div class="inputBox shadow">
+			<!-- Modal 컴포넌트 -->
+			<Modal v-if="showModal" @close="showModal = false">
+				<h3 slot="header">
+					경고
+					<i class="closeModalBtn fas fa-times" @click="showModal = false"></i>
+				</h3>
+				<div slot="body">무언가를 입력하세요</div>
+				<div slot="footer">copyright</div>
+			</Modal>
+		</div>
+	</template>
+	```
+	<br />
+
+
 
