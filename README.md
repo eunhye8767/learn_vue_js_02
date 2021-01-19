@@ -1787,3 +1787,45 @@ console.log(i);     // 6
 	- 예시 : [ App.vue ] const obj
 - for문에선 값이 계속 바뀌기 때문에 let을 사용한다
 	- 예시 : [ App.vue ] let i
+
+<br />
+<br />
+<br />
+
+## 6. 화살표 함수
+### 6.1. 화살표 함수 소개 및 설명
+- **Arrow Function (화살표 함수)** 또는 fat arrow(팻 애로우), 팻 화살표 함수 라고 불린다.
+- 함수를 정의할 때 **function 이라는 키워드를 사용하지 않고 => 로 대체**
+- 흔히 사용하는 *콜백 함수*의 문법을 간결화
+```JAVASCRIPT
+// ES5 함수 정의 방식
+var sum = function(a,b) {
+	return a+b;
+}
+
+// ES6 함수 정의 방식
+var sum = (a,b) => {
+	return a+b;
+}
+
+sum(10, 20);
+```
+- 화살표 함수 사용 예시
+	- ES6에서 인자가 1개일 경우 ( ) 를 하지 않아도 된다
+	```JAVASCRIPT
+	// ES5
+	var arr = ["a","b","c"];
+	arr.forEach(function(value){
+		console.log(value);     // a,b,c
+	})
+
+	// ES6
+	var arr = ["a","b","c"];
+	arr.forEach(value => console.log(value));     // a,b,c
+	```
+	![6-1-1](./_images/6-1-1.png)<br />
+	<br />
+
+	- 함수 표현식 예시<br />
+	![6-1-2](./_images/6-1-2.png)<br />
+	<br />
