@@ -1684,10 +1684,30 @@ li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
 ### 5.2. const & let 소개
 - const & let : 새로운 변수 선언 방식
 - **블록 단위 { } 로 변수의 범위가 제한**되었음
+	- i는 접근이 되질 않아 값을 알 수가 없다
+	```JAVASCRIPT
+	let sum = 0;
+	for ( let i=1; i <=5; i++ ) {
+		sum = sum + i;
+	}
+	console.log(sum)	// 10
+	console.log(i)	  // Uncaught ReferenceError : i is not defined
+	```
+	<br />
+	
 - **const** : 한 번 선언한 값에 대해서 **변경할 수 없음**(상수 개념)
 	- const 예시 :<br /> 
 		![5-1-2](./_images/5-1-2.png)<br />
-		<br />
+	- 단, **객체나 배열의 내부는 변경**할 수 있다.
+		```JAVASCRIPT
+		const a = {};
+		a.num = 10;
+		console.log(a);	    // {num: 10}
+
+		const a = [];
+		a.push(20);
+		console.log(a);      // [20]
+		```
 
 - **let** : 한 번 선언한 값에 대해서 **다시 선언할 수 없음**
 	- let 예시 :<br />
