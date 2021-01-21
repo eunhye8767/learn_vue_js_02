@@ -1789,11 +1789,8 @@ console.log(i);     // 6
 	- 예시 : [ App.vue ] let i
 
 <br />
-<br />
-<br />
 
-## 6. 화살표 함수
-### 6.1. 화살표 함수 소개 및 설명
+### 5.5. 화살표 함수 소개 및 설명
 - **Arrow Function (화살표 함수)** 또는 fat arrow(팻 애로우), 팻 화살표 함수 라고 불린다.
 - 함수를 정의할 때 **function 이라는 키워드를 사용하지 않고 => 로 대체**
 - 흔히 사용하는 *콜백 함수*의 문법을 간결화
@@ -1823,9 +1820,83 @@ sum(10, 20);
 	var arr = ["a","b","c"];
 	arr.forEach(value => console.log(value));     // a,b,c
 	```
-	![6-1-1](./_images/6-1-1.png)<br />
+	![5-5-1](./_images/5-5-1.png)<br />
 	<br />
 
 	- 함수 표현식 예시<br />
-	![6-1-2](./_images/6-1-2.png)<br />
+	![5-5-2](./_images/5-5-2.png)<br />
 	<br />
+
+### 5.6. EnHanced Object Literals(향상된 객체 리터럴)
+- EnHanced Object Literlas: 인핸스드 오브젝트 리터럴
+- **객체의 속성을 메서드로 사용할 때 function 예약어를 생략**하고 생성가능
+	- lookup: function() --> lookup() 으로 변경되어 사용
+	```JAVASCRIPT
+	var dictionary = {
+		words: 100,
+		// ES5
+		lookup: function() {
+			console.log("find words")
+		},
+		// ES6
+		lookup() {
+			console.log("find words")
+		}
+	}
+	```
+	- 사용 예시 : data() {}, addTodo() {}, clearInput() {}
+	```JAVASCRIPT
+	// TodoInput.vue
+
+	export default {
+		data() {
+			return {
+				newTodoItem: "",
+				showModal: false,
+			}
+		},
+		methods: {
+			addTodo() {
+				if(this.newTodoItem !== '') {
+					this.$emit('addTodoItem', this.newTodoItem)
+					this.clearInput();
+				} else {
+					this.showModal = !this.showModal
+				}
+			},
+			clearInput() {
+				this.newTodoItem = ""
+			}
+		},
+		components: {
+			Modal: Modal,
+		}
+	}
+	```
+	<br />
+
+- **객체의 속성명과 값 명이 동일할 때** 아래와 같이 **축약 가능**
+	- figures : figures 동일할 때 -> figures 로 축약가능
+	```JAVASCRIPT
+	var figures = 10;
+	var dictionary = {
+		//figures : figures
+		figures
+	}
+	```
+	- 사용 예시 : 'TodoHeader' : TodoHeader -> TodoHeader
+	```JAVASCRIPT
+	// App.vue
+
+	components: {
+    // 'TodoHeader' : TodoHeader,
+    // 'TodoInput' : TodoInput,
+    // 'TodoList' : TodoList,
+		// 'TodoFooter' : TodoFooter,
+		TodoHeader,
+		TodoInput,
+		TodoList,
+		TodoFooter,
+  }
+	```
+<br />
