@@ -1900,3 +1900,55 @@ sum(10, 20);
   }
 	```
 <br />
+
+### 5.7. Modules - 자바스크립트 모듈화 방법
+- ES5 : ES5에서는 모듈화 방법이 없었다. 그렇기 때문에 모듈화를 지원하기 위해 모듈 로더 라이브러리(AMD, Commons JS)를 사용했었다
+	- 모듈 : 특정 기능을 수행하는 한 단위(한 덩어리. 묶음)
+- **ES6 : 자바스크립트 모듈 로더 라이브러리(AMD, Common JS) 기능을 js 언어 자체에서 지원**
+	- 언어 자체에서 지원을 함으로써 개발자의 수고가 덜어짐.
+- **모듈화를 이용하는 이유는 재사용성이 뛰어난 기능들을 묶어서 필요할 때마다 갖다 쓸 수** 있게끔 하는 측면에서 사용
+- 호출되기 전까지는 코드 실행과 동작을 하지 않는 특징이 있음
+- import 를 할 때 export 가 실행이 된다
+	- main.js 파일에서 import로 libs/math.js (정의된 함수 등) 가져오고 그것을 main.js에서 호출한다
+```JAVASCRIPT
+// libs/math.js
+export function sum(x, y) {
+	return x + y;
+}
+export var pi = 3.131593;
+
+// main.js
+import {sum} from 'libs/math.js';
+sum(1,2);
+```
+- 사용예시 :
+```JAVASCRIPT
+// App.vue
+import TodoHeader from './components/TodoHeader.vue'
+```
+<br />
+
+- Vue.js에서 마주칠 **default** export
+	- defult : 한 개의 파일에서 하나 밖에 export 되지 않는다
+	- 이름을 부여하여 사용할 수 있다 ( x -> util, x -> log)
+```JAVASCRIPT
+// util.js
+export default function (x) {
+	return console.log(x);
+}
+
+// main.js
+import util from 'util.js';
+console.log(util);	// function (x) { return console.log(x); }
+util('hi');
+
+// app.js
+import log from 'util.js'
+console.log(log)
+log('hi');
+```
+<br />
+<br />
+<br />
+
+
