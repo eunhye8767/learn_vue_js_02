@@ -2120,3 +2120,58 @@ https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
 			store,
 		}).$mount('#app')
 		```
+<br />
+
+### 7.2. Vuex 기술요소
+- **state** : 여러 컴포넌트에 공유되는 데이터 **data**
+- **getters** : *연산된 state 값을 접근*하는 속성 **computed**
+- **mutations** : *state 값을 변경*하는 이벤트 로직/메서드 **methods**
+- **actions** : *비동기 처리 로직*을 선언하는 메서드 **aysnc methods**
+
+<br />
+
+### 7.3. state 와 getters 소개
+#### 7.3.1. state
+- **state 란?** : 여러 컴포넌트 간에 공유할 데이터 - 상태
+	- Vue.use(Vuex); 로 글로벌 펑셔널리티(Global Functionality)로 적용 해주었기 때문에 **this.$store** 로 쓸 수 있다.
+```JAVASCRIPT
+// Vue 
+data: {
+	message : 'Hello Vue.js!'
+}
+
+// Vuex
+state: {
+	message: 'Hello Vue.js!'
+}
+```
+```HTMl
+<!-- Vue -->
+<p>{{ message }}</p>
+
+<!-- Vuex -->
+<p>{{ this.$store.state.message }}</p>
+```
+<br />
+
+#### 7.3.2. getters
+- **getters 란?** : *state 값을 접근하는 속성*이자 *computed() 처럼 미리 연산된 값을 접근*하는 속성
+```JAVASCRIPT
+// store.js
+state: {
+	num: 10
+},
+getters: {
+	getNumber(state) {
+		return state.num;
+	},
+	doubleNumber(state) {
+		return state.num * 2;
+	}
+
+}
+```
+```HTML
+<p>{{ this.$store.getters.getNumber }}</p>
+<p>{{ this.$store.getters.doubleNumber }}</p>
+```
