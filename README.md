@@ -1988,3 +1988,135 @@ Vuex : **상태 관리 라이브러리**<br />
 ![6-2-4](./_images/6-2-4.png)<br />
 <br />
 
+### 6.3. Vuex가 필요한 이유, Vuex 컨셉, Vuex 구조
+#### 6.3.1. Vuex가 왜 필요할 까?
+- 복잡한 애플리케이션에서 컴포넌트의 개수가 많아지면 컴포넌트 간에 데이터 전달이 어려워진다.
+	![6-3-1](./_images/6-3-1.png)<br />
+	<br />
+	- 이벤트 버스로 해결?
+		- 어디서 이벤트를 보냈는 지 혹은 어디서 이벤트를 받았는 지 알기 어려움
+			```JAVASCRIPT
+			// Login.vue
+			eventBus.$emit('fetch', loginInfo)
+
+			// List.vue
+			eventBus.$on('display',data => this.displayOnScreen(data));
+
+			// Chart.vue
+			eventBus.$emit('refreshData', chartData);
+			```
+			**※ 컴포넌트 간 데이터 전달이 명시적이지 않음**
+<br />
+
+- **Vuex 로 해결할 수 있는 문제**
+	1. MVC 패턴에서 발생하는 구조적 오류
+	2. 컴포넌트 간 데이터 전달 명시
+	3. 여러 개의 컴포넌트에서 같은 데이터를 업데이트 할 때 동기화 문제
+<br />
+
+#### 6.3.2. Vuex 컨셉 
+- Vuex도 단방향 데이터 흐름
+- State : 컴포넌트 간에 공유하는 데이터 **data()** (== 데이터 프로퍼티)
+- View : 데이터를 표시하는 화면 **template**
+- Action : 사용자의 입력에 따라 데이터를 변경하는 **methods**<br />
+	![6-3-2](./_images/6-3-2.png)<br />
+	<br />
+	※ View에서 내용을 입력하고 버튼을 클릭(Action)<br />
+	--> 입력받은 내용을 View에 전달(State)<br /> 
+	--> View에서 입력한 내용 화면에서 확인 )
+
+#### 6.3.3. Vuex 구조
+- 컴포넌트 --> 비동기 로직 --> 동기로직 --> 상태
+	- 비동기 로직 == Actions (메서드) : setTimeOut 같은, 데이터 변경X
+	- 동기 로직 == Mutations (메서드) : 데이터를 변경하여 State 전달
+	![6-3-3](./_images/6-3-3.png)<br />
+	<br />
+- 자바스크립트 비동기 처리와 콜백 함수 글<br />
+https://joshua1988.github.io/web-development/javascript/javascript-asynchronous-operation/
+- 자바스크립트 Promise 쉽게 이해하기<br />
+https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
+
+<br />
+<br />
+<br />
+
+## 7. Vuex - 주요 기술 요소
+### 7.1. Vuex 설치 및 등록
+1. Vuex 설치하기
+	- Vuex 공식 문서 : https://vuex.vuejs.org/
+	- Vuex 설치는 ES5와 ES6 2가지 방식이 있다<br />
+	ES6와 함께 사용해야 더 많은 기능과 이점을 제공받을 수 있음.
+	- Vuex는 싱글 파일 컴포넌트 체계에서 **NPM방식으로 라이브러리를 설치**하는 것이 좋다<br />
+	따라서, **Vue CLI로 생성한 프로젝트 폴더에서 npm 방식으로 라이브러리를 설치**한다.
+		```
+		npm install vuex --save
+		```
+	- Vuex 3.6 버전으로 설치된 것을 확인할 수 있다<br />
+		![7-1-1](./_images/7-1-1.png)<br />
+		<br />
+
+2. Vue CLI로 생성한 프로젝트 폴더 > package.json 파일에서 Vuex가 설치되어 적용된 것을 확인할 수 있다
+	- Vue CLI로 생성한 프로젝트 폴더명 : vue-todo
+	- vue-todo/package.json 에서 **"dependencies": { "vuex": "^3.6.0" }**<br />
+		![7-1-2](./_images/7-1-2.png)<br />
+		<br />
+
+3. Vuex 를 보통 스토어 라고 하며, 스토어 경우 관행적으로 저장하는 폴더가 있다
+	- src/store 폴더를 생성한 후, store.js 파일을 생성한다<br />
+		![7-1-3](./_images/7-1-3.png)<br />
+	- 이것이 일반적이 Vuex 구조라고 생각하면 된다
+
+4. store.js 에서 Vuex 호출을 한다
+	```JAVASCRIPT
+	import Vue from 'vue'
+	import Vuex from 'vuex'
+	```
+<br />
+
+5. Vue 플러그인 사용 설정
+	- .use : 뷰의 플러그인 이라는 기능
+	- **.use를 사용하는 이유는 뷰를 사용할 때 전역**으로, 뷰를 사용하는 모든 영역에 특정 기능을 추가하고 싶을 때 글로벌 펑셔널리티(Global Functionality)를 추가 하고 싶을 때 사용하는 부분이다.
+	- .use(Vuex) : *Vuex를 쓴다* 라고 했기 때문에 나중에 코드 단에서 어떤 특정 컴포넌트에서 this.$store 접근이 가능한 부분이다
+	- .use(Vuex) 의 this.$store 처럼 지원되는 라이브러리가 있고 그렇지 않은 것은 플러그인을 만들어서 사용해야 한다.
+	```JAVASCRIPT
+	// store.js
+	import Vue from 'vue';
+	import Vuex from 'vuex';
+
+	Vue.use(Vuex);
+	```
+<br />
+
+6. 여기까지가 **설치부터 Vuex 등록까지 완료된 상태**이다.
+	``` JAVASCRIPT
+	// store.js
+
+	import Vue from 'vue'
+	import Vuex from 'vuex'
+
+	Vue.use(Vuex);
+
+	export const store = new Vuex.Store({
+
+	});
+	```
+<br />
+
+7. **main.js 에 등록 완료된 Vuex 를 연결**해준다
+	- **export const 변수로 선언한 순간 변수를 다른 파일에서도 사용**할 수 있다
+		```JAVASCRIPT
+		// store.js
+		export const store
+		```
+	- **main.js 파일에서** export const 변수로 선언한 변수를 **{ 변수명 } 설정**해준다
+		- import { 변수명 } from '경로'
+		- import 로 연결 해준 후, new Vue({  }) 인스턴스에 import로 선언한 변수명을 기재해준다
+		```JAVASCRIPT
+		// main.js
+		import { store } from './store/store'
+
+		new Vue({
+			render: h => h(App),
+			store,
+		}).$mount('#app')
+		```
