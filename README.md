@@ -2175,3 +2175,165 @@ getters: {
 <p>{{ this.$store.getters.getNumber }}</p>
 <p>{{ this.$store.getters.doubleNumber }}</p>
 ```
+<br />
+
+### 7.4. [리팩토링] state 속성 적용
+1. 애플리케이션에 바로 적용하는 것이 아닌 테스트로 제대로 작동하는 지 확인 작업을 한다
+	```JAVASCRIPT
+	// store.js
+	export const store = new Vuex.Store({
+		state: {
+			headerText : 'TODO it!',
+		}
+	});
+	```
+	- state에 추가한 headerText 를 적용해본다
+	```HTML
+	<!-- TodoHeader.vue -->
+	<template>
+		<header>
+			<!-- <h1>TODO it!</h1> -->
+			<h1>{{ this.$store.state.headerText}}</h1>
+		</header>
+	</template>
+	```
+	- [뷰 개발자 도구] store.js 파일의 state의 headerText 속성에 적용된 값이 화면 view에 적용된 것을 확인할 수 있다
+	![7-4-1](./_images/7-4-1.png)<br />
+	<br />
+
+2. App.vue 에 적용했던 data - todoItems 를 **store.js 에 적용**한다
+	```JAVASCRIPT
+	// store.js
+
+	export const store = new Vuex.Store({
+		state: {
+			todoItems: []
+		}
+	});
+	```
+	<br />
+
+3. App.vue 의 created() 에 적용된 코드를 store.js 에 적용한다
+	1. 로컬스토리지에 관련된 것들을 하나의 변수를 만들어서 적용한다.
+	2. 만든 변수에 fetch() 라는 속성을 선언한다.
+	3. created()에 적용되었던 코드를 fetch()에 적용한다<br />
+	(기존 created() 에 적용된 API, 동작들을 fetch()에 적용)
+	```JAVASCRIPT
+	const storage = {
+		fetch() {
+			if ( localStorage.length > 0 ) {
+				for(let i=0; i < localStorage.length; i++) {
+					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+						this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+					}
+				}
+			}
+		}
+	}
+	```
+	<br />
+
+4. storage(스토리지) 라는 객체 변수를 export const store 에서 호출하려고 한다.<br />
+store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 담아와서 배열로 돌려주려고 한다<br />
+
+5. const storage 객체 변수의 fetch() 속성에 const arr 를 선언한다
+	```JAVASCRIPT
+	const storage = {
+		fetch() {
+			const arr = [];
+			if ( localStorage.length > 0 ) {
+				for(let i=0; i < localStorage.length; i++) {
+					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+						this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+					}
+				}
+			}
+		}
+	}
+	```
+	<br />
+
+6. const storage - fetch() 속성에 적용된 코드에서 this.todoItems 는 스코프가 다르기 때문에 todoItems에 접근할 수가 없다.<br />
+새로 만든 빈 배열인 arr에 담아준다
+	```JAVASCRIPT
+	const storage = {
+		fetch() {
+			const arr = [];
+			if ( localStorage.length > 0 ) {
+				for(let i=0; i < localStorage.length; i++) {
+					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+						arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+					}
+				}
+			}
+			return arr;
+		}
+	}
+	```
+<br />
+
+7. storage - arr 배열에 담긴 정보를 todoItems에 넣어준다.
+	```JAVASCRIPT
+	const storage = {
+		fetch() {
+			const arr = [];
+			if ( localStorage.length > 0 ) {
+				for(let i=0; i < localStorage.length; i++) {
+					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+						arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+					}
+				}
+			}
+			return arr;
+		}
+	}
+
+	export const store = new Vuex.Store({
+		state: {
+			todoItems: storage.fetch(),
+		}
+	});
+	```
+<br />
+
+8. TodoList.vue 에서 store.js 에서 생성한 state - todoItems 값으로 변경해준다
+	```HTML
+	<!-- AS-IS -->
+	<template>
+		<div>
+			<transition-group name="list" tag="ul">
+				<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+					<i class="checkBtn fas fa-check" 
+						v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+						v-on:click="toggleComplate(todoItem, index)"></i>
+					<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+					<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+						<i class="fas fa-trash-alt"></i>
+					</span>
+				</li>
+			</transition-group>
+		</div>
+	</template>
+
+	<!-- TO-BE -->
+	<template>
+		<div>
+			<transition-group name="list" tag="ul">
+				<li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item" class="shadow">
+					<i class="checkBtn fas fa-check" 
+						v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+						v-on:click="toggleComplate(todoItem, index)"></i>
+					<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+					<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+						<i class="fas fa-trash-alt"></i>
+					</span>
+				</li>
+			</transition-group>
+		</div>
+	</template>
+	```
+<br />
+
+9. [ 뷰 개발자 도구 ] Vuex 탭에서 보면 store.js 에서 설정한 state - todoItems 값이 적용된 것을 확인할 수 있다
+	![7-4-2](./_images/7-4-2.png)<br />
+	<br />
