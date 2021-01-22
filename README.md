@@ -2337,3 +2337,56 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 9. [ 뷰 개발자 도구 ] Vuex 탭에서 보면 store.js 에서 설정한 state - todoItems 값이 적용된 것을 확인할 수 있다
 	![7-4-2](./_images/7-4-2.png)<br />
 	<br />
+
+### 7.5. mutations 와 commit() 형식 소개
+#### 7.5.1 mutation
+- **state의 값을 변경**할 수 있는 **유일한 방법**이자 메서드
+- mutation(뮤테이션)은 commit()으로 동작시킨다
+- mutations - 속성 메서드에는 첫번째 인자로 항시 state를 갖고 온다. 그래서 mutations에서 state 속성 값을 변경할 수 있다.	Vuex의 규약이라고 생각하면 된다.
+	- **commit() 커밋**은 mutation을 발동시키는, **동작시키는 명령어**이다
+		- commit(mutation - 속성이름) == this.$store.commit('printNumbers');
+		- commit(mutation - 속성이름, 인자) == this.$store.commit('sumNumbers', 20);
+	```JAVASCRIPT
+	// store.js
+	state: { 
+		num: 10
+	},
+	mutations: {
+		printNumbers(state) {
+			return state.num
+		},
+		sumNumbers(state, anothereNum) {
+			return state.num + anotherNum;
+		}
+	}
+
+	// App.vue
+	this.$store.commit('printNumbers');   // 10
+	this.$store.commit('sumNumbers', 20); // 30
+
+	```
+	<br />
+
+#### 7.5.2. mutations의 commit() 형식
+- state를 변경하기 위해 mutations를 동작시킬 때 인자(payload)를 전달할 수 있음
+	- 여러 개의 값을 넘겨줄 경우 key: value 의 객체 형태로 넘겨줄 수 있음
+	- 통상적으로 payload 를 쓰는데 다른 이름으로 바꿔서 사용해도 된다
+	```JAVASCRIPT
+	// store.js
+	state: {
+		storeNum: 10
+	},
+	mutations: {
+		modifyState(state, payload) {
+			console.log(payload.str);
+			return state.storeNum += payload.num;
+		}
+	}
+
+	// App.vue
+	this.$store.commit('modifyState', {
+		str: 'passed from payload',
+		num: 20
+	})
+	```
+	<br />
