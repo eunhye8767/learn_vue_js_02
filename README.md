@@ -2390,3 +2390,240 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 	})
 	```
 	<br />
+
+### 7.6. [리팩토링] mutations 적용
+1. TodoList.vue 에서 v-for 디렉티브에서 propsdata가 아닌 this.$store.state.todoItems 으로 대체하였기 때문에 propsdata 적용된 **코드를 삭제**한다
+	```JAVASCRIPT
+	// TodoList.vue 
+	props: ['propsdata'],  // 삭제
+	```
+<br />
+
+2. App.vue 의 created() {}에 적용된 코드는<br />
+store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {} 는 삭제**한다.
+	```JAVASCRIPT
+	// App.vue
+	// created() {} 전체 삭제
+	created() {
+		if ( localStorage.length > 0 ) {
+			for(let i=0; i < localStorage.length; i++) {
+				if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+					this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+				}
+			}
+		}
+	},
+	```
+<br />
+
+3. App.vue의 methods를 mutations으로 적용한다.<br />
+(methods == mutations)
+<br />
+
+4. [ App.vue - methods : addOneItem ]
+	1. store.js 의 mutations 속성을 만든 후, addOneItem 메서드를 생성하고 App.vue에 적용된 코드를 그대로 붙여넣기 한다.
+		```JAVASCRIPT
+		export const store = new Vuex.Store({
+			mutations: {
+				addOneItem() {
+					const obj = { completed: false, item: todoItem,};
+					localStorage.setItem(todoItem, JSON.stringify(obj));
+					this.todoItems.push(obj);
+				}
+			}
+		});
+		```
+	2. App.vue - addOneItem 메서드 에선 todoItem 인자를 받고 있다.<br />
+	해당 부분을 보면 TodoInput 에서 addOneItem 이벤트가 실행되는 것을 볼 수 있다.
+
+	3. TodoInput.vue 파일을 연다.<br />this.$emit('addTodoItem', this.newTodoItem)<br />$emit 으로 인자를 전달하는 것을 알 수 있다.<br />this.$emit 을 this.$store.commit() 으로 코드를 변경한다  
+		- TodoInput.vue에서 commit 할 때, 입력된 값(this.newTodoItem)도 같이 보내준다.
+		- .trim() == 앞뒤의 공백을 제거해주는 기능
+			```JAVASCRIPT
+			// TodoInput.vue
+			// $emit 부분을 아래 코드로 변경
+			const text = this.newTodoItem.trim();
+			this.$store.commit('addOneItem', text);
+			```
+	
+	4. store.js - addOneItem(state, todoItem)
+		- mutations(뮤테이션)은 항시 첫번째 인자로 state
+		- 2번째 인자로는 TodoInput.vue에서 전달해준 값을 todoItem 인자로 받는다.
+		```JAVASCRIPT
+		mutations: {
+			addOneItem(state, todoItem) {
+				const obj = { completed: false, item: todoItem, };
+				localStorage.setItem(todoItem, JSON.stringify(obj));
+				this.todoItems.push(obj);
+			},
+		}
+		```
+
+	5. store.js - addOneItem(state, todoItem)
+		- this.todoItems.push 가 아닌 state.todoItems 로 변경한다
+		- state로 접근해서 값을 넣어준다
+		```JAVASCRIPT
+		export const store = new Vuex.Store({
+			state: {
+				todoItems: storage.fetch(),
+			},
+			mutations: {
+				addOneItem(state, todoItem) {
+					const obj = { completed: false, item: todoItem, };
+					localStorage.setItem(todoItem, JSON.stringify(obj));
+					state.todoItems.push(obj);
+				},
+			}
+		});
+		```
+
+	6. [ 뷰 개발자 도구 ] mutations 에 추가된 내역을 확인할 수 있다
+		- payload : 5  ==  인자 값을 5로 받았다
+		- type == 이벤트 메서드 이름
+		![7-6-1](./_images/7-6-1.png)<br />
+		<br />
+	
+	7. App.vue 에서 메서드와 v-on 디렉티브 **삭제**
+		- addOneItem 메서드 삭제
+		- TodoInput v-on: 디렉티브 삭제 
+			- TodoInput.vue 와 Store.js 와 직접적으로 연관되어 있기 때문에 App.vue 에서 v-on 디렉티브는 삭제
+		```HTML
+		<template>
+			<div id="app">
+				<TodoHeader></TodoHeader>
+				<!-- TodoInput v-on:addTodoItem="addOneItem"></TodoInput  v-on 삭제-->
+				<TodoInput></TodoInput>
+				<TodoList 
+					v-bind:propsdata="todoItems" 
+					v-on:removeItem="removeOneItem"
+					v-on:toggleItem="toggleOneItem"></TodoList>
+				<TodoFooter v-on:clearAll="clearAllItem"></TodoFooter>
+			</div>
+		</template>
+		```
+		<br />
+
+	5. [ App.vue - methods : removeOneItem ] -> store.js 코드 적용
+		1. TodoList.vue 코드 수정
+			- 인자로 받은 todoItem, index 를 하나의 객체(obj)로 생성하여 commit으로 정보를 전달한다
+			- ES6 객체지향 문법에 따라 키:밸류 값이 같을 땐, 한 번만 기재<br />(index: index => index)
+			```JAVASCRIPT
+			// TodoList.vue
+			// 방법 1
+			export default {
+				methods: {
+					removeTodo(todoItem, index) {
+						// this.$emit('removeItem', todoItem, index);
+						const obj = { 
+							todoItem,
+							index
+						};
+						this.$store.commit('removeItem', obj);
+					},
+				},
+			}
+			
+			// 방법 2
+			export default {
+				methods: {
+					removeTodo(todoItem, index) {
+						// this.$emit('removeItem', todoItem, index);
+						this.$store.commit('removeItem', { todoItem, index} );
+					},
+				},
+			}
+			```
+		2. store.js 에서 payload로 obj 정보를 넘겨 받는다
+			```JAVASCRIPT
+			mutations: {
+				removeOneItem(state, payload) {
+					localStorage.removeItem(payload.todoItem.item);
+					state.todoItems.splice(payload.index, 1);
+				},
+				
+			}
+			```
+		3. App.vue - TodoList 컴포넌트에서 v-on:removeItem="removeOneItem" 삭제
+	<br />
+
+	6. [ App.vue - methods : toggleOneItem ] -> store.js 코드 적용
+		1. 기존 toggleOneItem 메서드도 todoItems 와 index 를 인자로 받기 때문에 removeOneItem 과 마찬가지로 state, payload 로 인자를 받는다.
+			```JAVASCRIPT
+			// store.js
+			mutations: {
+				toggleOneItem(state, payload) {
+				},
+			}
+			```
+		2. TodoList.vue 에서 commit() 코드를 적용한다
+			```JAVASCRIPT
+			// TodoList.vue
+			export default {
+				methods: {
+					toggleComplate(todoItem, index) {
+						this.$store.commit('toggleOneItem', {todoItem, index} );
+					}
+				},
+			}
+			```
+		3. App.vue - TodoList 컴포넌트에서 v-on:toggleItem="toggleOneItem" 삭제
+		4. toggleOneItem 메서드를 store.js에 맞게 수정한다
+			```JAVASCRIPT
+			// store.js
+			mutations: {
+				toggleOneItem(state, payload) {
+					state.todoItems[payload.index].completed = !state.todoItems[payload.index].completed
+
+					// 로컬 스토리지의 데이터 갱싱
+					localStorage.removeItem(payload.todoItem.item);
+					localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
+				},
+			}
+			```
+		<br />
+	
+	7. **[ 뷰 개발자 도구 팁 ]**
+		- 뷰 개발자도구, Vuex 탭에서 해당 아이콘을 클릭하면 해당 버튼을 클릭하기 전의 상태로 돌아간다.
+		![7-6-2](./_images/7-6-2.png)<br />
+		<br />
+
+	8. [ App.vue - methods : clearAllItem ] -> store.js 코드 적용
+		1. store.js - mutation에 clearAllItem 메서드 적용
+		2. TodoFooter.vue 에서 commit('clearAllItem')을 실행한다.
+			```JAVASCRIPT
+			// TodoFooter.vue
+			export default {
+				methods: {
+					clearTodo() {
+						this.$store.commit('clearAllItem')
+					}
+				}
+			}
+			```
+		3. App.vue - TodoFooter 컴포넌트 태그에서 v-on:clearAll="clearAllItem" 삭제
+		4. store.js - clearAllItem 코드 작성
+			```JAVASCRIPT
+			// store.js
+			clearAllItem(state) {
+				localStorage.clear();
+				state.todoItems = [];
+			}
+			```
+			<br />
+	
+	9. App.vue, data - todoItems 속성 삭제
+	10. App.vue, TodoList 컴포넌트 태그에서 v-bind:propsdata="todoItems" 삭제
+		```HTML
+		<template>
+			<div id="app">
+				<TodoHeader></TodoHeader>
+				<TodoInput></TodoInput>
+				<TodoList></TodoList>
+				<TodoFooter></TodoFooter>
+			</div>
+		</template>
+		```
+	<br />
+
+	11. 코드가 한결 깔끔해진 것을 확인할 수 있다.
+<br />
