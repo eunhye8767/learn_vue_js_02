@@ -61,14 +61,14 @@ vue 자동완성 기능을 통해 기본 구성(template, script, style)을 맞�
 ![2-1-1](./_images/2-1-1.png)<br />
 
 3. src/App.vue 파일에 생성한 컴포넌트 파일을 script 영역에 연결(import)해준다
-```
+```HTML
 <template>
-	<div id="app">
-		<TodoHeader></TodoHeader>
-		<TodoInput></TodoInput>
-		<TodoList></TodoList>
-		<TodoFooter></TodoFooter>
-	</div>
+  <div id="app">
+    <TodoHeader></TodoHeader>
+    <TodoInput></TodoInput>
+    <TodoList></TodoList>
+    <TodoFooter></TodoFooter>
+  </div>
 </template>
 
 <script>
@@ -79,13 +79,13 @@ import TodoList from './components/TodoList.vue'
 import TodoFooter from './components/TodoFooter.vue'
 
 export default {
-	components: {
-		// 컴포넌트 태그명 : 컴포넌트 내용
-		'TodoHeader' : TodoHeader,
-		'TodoInput' : TodoInput,
-		'TodoList' : TodoList,
-		'TodoFooter' : TodoFooter,
-	}
+  components: {
+    // 컴포넌트 태그명 : 컴포넌트 내용
+    'TodoHeader' : TodoHeader,
+    'TodoInput' : TodoInput,
+    'TodoList' : TodoList,
+    'TodoFooter' : TodoFooter,
+  }
 }
 </script>
 
@@ -102,21 +102,21 @@ export default {
 - ./public/index.html 에 적용한다
 	1. 반응형 메타태그 외에 아래 메타태그 3종이 적용되어 있는 지 확인
 		- 뷰포트 < meta name="viewport" content="width=device-width,initial-scale=1.0" >
-	```
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	```
+		```HTML
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		```
 
 <br />
 
 ### 2.3. TodoHeader 컴포넌트 구현
 1. TodoHeader.vue 파일에서 마크업을 한다
-```
+```HTML
 <template>
-	<header>
-		<h1>TODO it!</h1>
-	</header>
+  <header>
+    <h1>TODO it!</h1>
+  </header>
 </template>
 ```
 <br />
@@ -125,262 +125,262 @@ export default {
 	- scoped : 뷰 싱글 파일 컴포넌트에서 지원하는 속성
 		- 해당 컴포넌트 아래에서만 존재하는(유효한) style 적용<br />
 		동일한 곳, 클래스명, 아이디명 이라 하더라도 해당 컴포넌트에 포함되어 있지 않으면 상속되지 않는다.
-```
-<style scoped>
-	h1 {
-		color: #2f3b52;
-		font-weight: 900;
-		margin: 2.5rem 0 1.5rem;
-	}
-</style>
-```
+	```CSS
+	<style scoped>
+	  h1 {
+      color: #2f3b52;
+      font-weight: 900;
+      margin: 2.5rem 0 1.5rem;
+    }
+	</style>
+	```
 <br />
 
 ### 2.4. TodoInput 컴포넌트의 할 일 저장 기능 구현
 1. 인풋박스에 입력된 내용을 받기 위해 v-model 디렉티브를 이용한다
 2. v-model을 사용하기 위해 script 에 data 속성 newTodoItem을 추가하여 인풋박스 v-mdodel과 연결한다
-```
-<template>
-	<div>
-		<input type="text" v-model="newTodoItem">
-	</div>
-</template>
-```
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
+	```HTML
+	<template>
+		<div>
+			<input type="text" v-model="newTodoItem">
+		</div>
+	</template>
+	```
+	```JAVASCRIPT
+	export default {
+		data: function() {
+			return {
+				newTodoItem: "",
+			}
 		}
 	}
-}
-```
-![2-4-1](./_images/2-4-1.png)<br />
-<br />
+	```
+	![2-4-1](./_images/2-4-1.png)<br />
+	<br />
 
 3. add 버튼을 만들고 addTodo 이벤트를 연결한다.<br />
 연결된 이벤트를 script - methods 속성에 addTodo 함수를 만든다
-```
-<template>
-	<div>
-		<input type="text" v-model="newTodoItem">
-		<button v-on:click="addTodo">add</button>
-	</div>
-</template>
-```
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			
-		}
+	```HTML
+	<template>
+		<div>
+			<input type="text" v-model="newTodoItem">
+			<button v-on:click="addTodo">add</button>
+		</div>
+	</template>
+	```
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+      return {
+        newTodoItem: "",
+      }
+    },
+    methods: {
+      addTodo: function() {
+        
+      }
+    }
 	}
-}
-```
+	```
 
 4. 버튼을 클릭할 때마다 인풋박스에 입력된 내용이 log에 보이게 적용
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			console.log(this.newTodoItem);
-		}
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      newTodoItem: "",
+	    }
+	  },
+	  methods: {
+	    addTodo: function() {
+	      console.log(this.newTodoItem);
+	    }
+	  }
 	}
-}
-```
-![2-4-2](./_images/2-4-2.png)<br />
-<br />
+	```
+	![2-4-2](./_images/2-4-2.png)<br />
+	<br />
 
 5. 인풋박스 입력 후 add 를 클릭한 후에 localStarage(로컬스토리지)에 저장을 한다
 	- localStorage.setItem(keyName, keyValue)
 	- localStorage에 keyName, keyValue 값을 전달하여 추가하거나 업데이트
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			// 저장하는 로직
-			localStorage.setItem();
-		}
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      newTodoItem: "",
+	    }
+	  },
+	  methods: {
+	    addTodo: function() {
+	      // 저장하는 로직
+	      localStorage.setItem();
+	    }
+	  }
 	}
-}
-```
+	```
 
 6. setItem에 keyName 과 keyValue 값을 this.newTodoItem 으로 동일하게 적용한다
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			// 저장하는 로직
-			localStorage.setItem(this.newTodoItem, this.newTodoItem);
-		}
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      newTodoItem: "",
+	    }
+	  },
+	  methods: {
+	    addTodo: function() {
+	      // 저장하는 로직
+	      localStorage.setItem(this.newTodoItem, this.newTodoItem);
+	    }
+	  }
 	}
-}
-```
+	```
 
 7. localStorage(로컬스토리지)에 .setItem() 을 이용해 인풋박스에 입력된 정보를 저장하면 브라우저 개발자도구에서 **Application 패널 탭 -> Storage -> Local Storage 에서 입력된 정보를확인**할 수 있다<br />
-![2-4-3](./_images/2-4-3.png)<br />
-<br />
+	![2-4-3](./_images/2-4-3.png)<br />
+	<br />
 
 8. add 버튼을 누른 후 인풋박스를 초기화시킨다
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			// 저장하는 로직
-			localStorage.setItem(this.newTodoItem, this.newTodoItem);
-			this.newTodoItem = ""
-		}
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      newTodoItem: "",
+	    }
+	  },
+	  methods: {
+	    addTodo: function() {
+	      // 저장하는 로직
+	      localStorage.setItem(this.newTodoItem, this.newTodoItem);
+	      this.newTodoItem = ""
+	    }
+	  }
 	}
-}
-```
-![2-4-4](./_images/2-4-4.png)<br />
-<br />
+	```
+	![2-4-4](./_images/2-4-4.png)<br />
+	<br />
 
 ### 2.5. TodoInput 컴포넌트 코드 정리 및 UI 스타일링
 1. 인풋박스 입력 -> add 버튼을 클릭하면 인풋박스 초기화 시켜주는 코드를 함수로 생성한다<br />
 	- clearInput 메서드 함수를 만들었다
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			localStorage.setItem(this.newTodoItem, this.newTodoItem);
+	```JAVASCRIPT
+	export default {
+		data: function() {
+			return {
+				newTodoItem: "",
+			}
 		},
-		clearInput: function() {
-			this.newTodoItem = ""
+		methods: {
+			addTodo: function() {
+				localStorage.setItem(this.newTodoItem, this.newTodoItem);
+			},
+			clearInput: function() {
+				this.newTodoItem = ""
+			}
 		}
 	}
-}
-```
+	```
 
 2. addTodo 메서드 함수에서 this 를 이용하여 clearInput 함수를 실행시켜준다<br />
 그러면 아까와 동일한 기능을 적용하게 된다
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			localStorage.setItem(this.newTodoItem, this.newTodoItem);
-			this.clearInput();
+	```JAVASCRIPT
+	export default {
+		data: function() {
+			return {
+				newTodoItem: "",
+			}
 		},
-		clearInput: function() {
-			this.newTodoItem = ""
+		methods: {
+			addTodo: function() {
+				localStorage.setItem(this.newTodoItem, this.newTodoItem);
+				this.clearInput();
+			},
+			clearInput: function() {
+				this.newTodoItem = ""
+			}
 		}
 	}
-}
-```
+	```
 
 3. UI 스타일링 작업(css 작업)
 	- button 에 적용한 v-on 디렉티브를 span에 추가하면 button과 동일한 기능이 적용된다
 	- **style** 에 **scoped** 를 적용하여 **해당 컴포넌트 .vue 파일에서만 적용**되게 한다
-```
-<template>
-	<div class="inputBox shadow">
-		<input type="text" v-model="newTodoItem">
-		<!-- <button v-on:click="addTodo">add</button> -->
-		<span class="addContainer" v-on:click="addTodo">
-			<i class="fas fa-plus addBtn"></i>
-		</span>
-	</div>
-</template>
-```
-```
-export default {
-	data: function() {
-		return {
-			newTodoItem: "",
-		}
-	},
-	methods: {
-		addTodo: function() {
-			localStorage.setItem(this.newTodoItem, this.newTodoItem);
-			this.clearInput();
+	```HTML
+	<template>
+		<div class="inputBox shadow">
+			<input type="text" v-model="newTodoItem">
+			<!-- <button v-on:click="addTodo">add</button> -->
+			<span class="addContainer" v-on:click="addTodo">
+				<i class="fas fa-plus addBtn"></i>
+			</span>
+		</div>
+	</template>
+	```
+	```JAVASCRIPT
+	export default {
+		data: function() {
+			return {
+				newTodoItem: "",
+			}
 		},
-		clearInput: function() {
-			this.newTodoItem = ""
+		methods: {
+			addTodo: function() {
+				localStorage.setItem(this.newTodoItem, this.newTodoItem);
+				this.clearInput();
+			},
+			clearInput: function() {
+				this.newTodoItem = ""
+			}
 		}
 	}
-}
-```
-```
-<style scoped>
-input:focus {
-	outline: none;
-}
-.inputBox {
-	background: #fff;
-	height: 50px;
-	line-height: 50px;
-	border-radius: 5px;
-}
-.inputBox input {
-	border-style: none;
-	font-size: .9rem;
-}
-.addContainer {
-	float: right;
-	background: linear-gradient(to right, #6478fb, #8763fb);
-	display: block;
-	width: 3rem;
-	border-radius: 0 5px 5px 0;
-}
-.addBtn {
-	color: #fff;
-	vertical-align: middle;
-}
-</style>
-```
+	```
+	```CSS
+	<style scoped>
+	input:focus {
+		outline: none;
+	}
+	.inputBox {
+		background: #fff;
+		height: 50px;
+		line-height: 50px;
+		border-radius: 5px;
+	}
+	.inputBox input {
+		border-style: none;
+		font-size: .9rem;
+	}
+	.addContainer {
+		float: right;
+		background: linear-gradient(to right, #6478fb, #8763fb);
+		display: block;
+		width: 3rem;
+		border-radius: 0 5px 5px 0;
+	}
+	.addBtn {
+		color: #fff;
+		vertical-align: middle;
+	}
+	</style>
+	```
 
 4. 수정한 마크업과 css 적용이 되었고 기능도 제대로 작동한 것을 확인할 수 있다
-![2-5-1](./_images/2-5-1.png)<br />
-<br />
+	![2-5-1](./_images/2-5-1.png)<br />
+	<br />
 
 5. **인풋박스 입력 후, 엔터를 누르면 엔터버튼을 클릭한 것과 동일한 효과**를 주려고 한다.
 	- 인풋박스에 v-on:keyup.enter 이벤트 기능을 추가하고 addTodo 메서드 함수를 연결해준다
-```
-<template>
-	<div class="inputBox shadow">
-		<input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo">
-		<!-- <button v-on:click="addTodo">add</button> -->
-		<span class="addContainer" v-on:click="addTodo">
-			<i class="fas fa-plus addBtn"></i>
-		</span>
-	</div>
-</template>
-```
+	```HTML
+	<template>
+	  <div class="inputBox shadow">
+	    <input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo">
+	    <!-- <button v-on:click="addTodo">add</button> -->
+	    <span class="addContainer" v-on:click="addTodo">
+	      <i class="fas fa-plus addBtn"></i>
+	    </span>
+	  </div>
+	</template>
+	```
 
 <br />
 
@@ -390,98 +390,98 @@ input:focus {
 	beforeUpdate, befoCreate 등 총 8개~10개정도 있다
 	- **created : 인스턴스가 생성되자마자 호출되는 라이프사이클 훅**을 말한다
 	- 훅 : 훅은 생성되는 시점에 로직이 실행된다는 의미.
-```
-export default {
-	created: function() {
-		
+	```JAVASCRIPT
+	export default {
+		created: function() {
+			
+		}
 	}
-}
-```
+	```
 <br />
 
 2. created 뷰 라이프사이클에 log를 적용해본다
 	- 인스턴스가 생성되지마자 log 되는 것을 확인할 수 있다
-```
-export default {
-	created: function() {
-		console.log('created');
+	```JAVASCRIPT
+	export default {
+		created: function() {
+			console.log('created');
+		}
 	}
-}
-```
-![2-6-1](./_images/2-6-1.png)<br />
-<br />
+	```
+	![2-6-1](./_images/2-6-1.png)<br />
+	<br />
 
 3. created 라이프사이클에서 로컬스토리지에 저장된 것을 log로 확인한다
 	- log에 localStorage.key(i) 정보를 가져오게 되어 있는데 브라우저에 접속하면 로컬스토리지에 저장된 정보들을 보여준다
 	- loglevel:webpack-dev-server는 웹팩 데브 서버로 프로포타이핑을 하기 때문에 자동으로 주입되는 것, 신경쓰지 않아도 된다
-```
-export default {
-	data: function() {
-		return {
-			todoItems: []
-		}
-	},
-	created: function() {
-		if ( localStorage.length > 0 ) {
-			for(var i=0; i < localStorage.length; i++) {
-				console.log(localStorage.key(i));
-			}
-		}
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      todoItems: []
+	    }
+	  },
+	  created: function() {
+	    if ( localStorage.length > 0 ) {
+	      for(var i=0; i < localStorage.length; i++) {
+	        console.log(localStorage.key(i));
+	      }
+	    }
+	  }
 	}
-}
-```
-![2-6-2](./_images/2-6-2.png)<br />
-<br />
+	```
+	![2-6-2](./_images/2-6-2.png)<br />
+	<br />
 
 4. created 라이프사이클에서 로컬스토리지에 저장된 것을 TodoList로 가져온다
 	- 로컬스토리지에서 가져오는 정보를 담을 data 속성에서 todoItems 빈 배열 객체를 만든다
 	- created 라이프사이클 훅에서 로컬스토리지의 정보를 todoItems에 적용한다(=넣어준다)(push)
-```
-export default {
-	data: function() {
-		return {
-			todoItems: []
-		}
-	},
-	created: function() {
-		if ( localStorage.length > 0 ) {
-			for(var i=0; i < localStorage.length; i++) {
-				this.todoItems.push(localStorage.key(i));
-			}
-		}
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      todoItems: []
+	    }
+	  },
+	  created: function() {
+	    if ( localStorage.length > 0 ) {
+	      for(var i=0; i < localStorage.length; i++) {
+	        this.todoItems.push(localStorage.key(i));
+	      }
+	    }
+	  }
 	}
-}
-```
+	```
 <br />
 
 5. 뷰 개발자 도구에서 보면 가져온 todoItems 정보들을 TodoList 컴포넌트에 담겨있는 것을 확인할 수 있다
-![2-6-3](./_images/2-6-3.png)<br />
-<br />
+	![2-6-3](./_images/2-6-3.png)<br />
+	<br />
 
 6. loglevel:webpack-dev-server 을 제거하는 코드를 적용한다.<br />
 	- for문 안에 if으로 조건을 걸어준다.
 	- 조건을 준 후에 브라우저에서 확인해보면 뷰 컴포넌트에서 webpack-dev-server 관련 정보가 제거된 것을 확인할 수 있다
-```
-export default {
-	data: function() {
-		return {
-			todoItems: []
-		}
-	},
-	created: function() {
-		// 로컬스토리지에 저장된 것을 가져온다
-		if ( localStorage.length > 0 ) {
-			for(var i=0; i < localStorage.length; i++) {
-				if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-					this.todoItems.push(localStorage.key(i));
-				}
-			}
-		}
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      todoItems: []
+	    }
+	  },
+	  created: function() {
+	    // 로컬스토리지에 저장된 것을 가져온다
+	    if ( localStorage.length > 0 ) {
+	      for(var i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          this.todoItems.push(localStorage.key(i));
+	        }
+	      }
+	    }
+	  }
 	}
-}
-```
-![2-6-4](./_images/2-6-4.png)<br />
-<br />
+	```
+	![2-6-4](./_images/2-6-4.png)<br />
+	<br />
 
 7. data - todoItems 에 저장된 정보를 화면에 출력해준다
 	- 리스트(li) 영역에 v-for문을 사용한다
@@ -490,119 +490,119 @@ export default {
 	- **v-bind:key를 입력**해준다<br />
 	key 가 중복되지 않는 선에서 key가 유일하기 때문에 **v-for문의 성능을 가속하시키는 장점**이 있다
 	- 데이터바인딩 문법으로 {{ todoItem }} 입력하여 화면에 출력시킨다
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="todoItem in todoItems" v-bind:key="todoItem">
+	        {{ todoItem }}
+        </li>
+	    </ul>
+	  </div>
+	</template>
 	```
+	![2-6-5](./_images/2-6-5.png)<br />
+	<br />
+
+### 2.7. TodoList 컴포넌트 UI 스타일링
+1. UI 스타일링 관련 CSS 적용
+	```CSS
+	<style>
+	ul {
+	  list-style-type: none;
+	  padding-left: 0px;
+	  margin-top: 0;
+	  text-align: left;
+	}
+	li {
+	  display: flex;
+	  min-height: 50px;
+	  height: 50px;
+	  line-height: 50px;
+	  margin: .5rem 0;
+	  padding: 0 .9rem;
+	  background: #fff;
+	  border-radius: 5px;
+	}
+	.removeBtn {
+	  margin-left: auto;
+	  color: #de4343;
+	}
+	.checkBtn {
+	  line-height: 45px;
+	  color: #62acde;
+	  margin-right: 5px;
+	}
+	.checkBtnCompleted {
+	  color: #b3adad;
+	}
+	.textCompleted {
+	  text-decoration: line-through;
+	  color: #b3adad;
+	}
+	</style>
+	```
+<br />
+
+2. 리스트(li)에 삭제 버튼을 추가한다
+	```HTML
 	<template>
 		<div>
 			<ul>
-				<li v-for="todoItem in todoItems" v-bind:key="todoItem">
+				<li v-for="todoItem in todoItems" v-bind:key="todoItem" class="shadow">
 					{{ todoItem }}
+					<span class="removeBtn">
+						<i class="fas fa-trash-alt"></i>
+					</span>
 				</li>
 			</ul>
 		</div>
 	</template>
 	```
-![2-6-5](./_images/2-6-5.png)<br />
-<br />
-
-### 2.7. TodoList 컴포넌트 UI 스타일링
-1. UI 스타일링 관련 CSS 적용
-```
-<style>
-ul {
-	list-style-type: none;
-	padding-left: 0px;
-	margin-top: 0;
-	text-align: left;
-}
-li {
-	display: flex;
-	min-height: 50px;
-	height: 50px;
-	line-height: 50px;
-	margin: .5rem 0;
-	padding: 0 .9rem;
-	background: #fff;
-	border-radius: 5px;
-}
-.removeBtn {
-	margin-left: auto;
-	color: #de4343;
-}
-.checkBtn {
-	line-height: 45px;
-	color: #62acde;
-	margin-right: 5px;
-}
-.checkBtnCompleted {
-	color: #b3adad;
-}
-.textCompleted {
-	text-decoration: line-through;
-	color: #b3adad;
-}
-</style>
-```
-<br />
-
-2. 리스트(li)에 삭제 버튼을 추가한다
-```
-<template>
-	<div>
-		<ul>
-			<li v-for="todoItem in todoItems" v-bind:key="todoItem" class="shadow">
-				{{ todoItem }}
-				<span class="removeBtn">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
-![2-7-1](./_images/2-7-1.png)<br />
-<br />
+	![2-7-1](./_images/2-7-1.png)<br />
+	<br />
 
 3. 추가한 버튼에 v-on:click 이벤트를 연결하고<br />
 연결한 이벤트의 메서드 함수도 추가한다
-```
-<template>
-	<div>
-		<ul>
-			<li v-for="todoItem in todoItems" v-bind:key="todoItem" class="shadow">
-				{{ todoItem }}
-				<span class="removeBtn" v-on:click="removeTodo">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
-```
-export default {
-	data: function() {
-		return {
-			todoItems: []
-		}
-	},
-	methods: {
-		removeTodo: function() {
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="todoItem in todoItems" v-bind:key="todoItem" class="shadow">
+	        {{ todoItem }}
+	        <span class="removeBtn" v-on:click="removeTodo">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      todoItems: []
+	    }
+	  },
+	  methods: {
+	    removeTodo: function() {
 			
-		}
-	},
-	created: function() {
-		if ( localStorage.length > 0 ) {
-			for(var i=0; i < localStorage.length; i++) {
-				if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-					this.todoItems.push(localStorage.key(i));
-				}
-				// console.log(localStorage.key(i));
-			}
-		}
+	    }
+	  },
+	  created: function() {
+	    if ( localStorage.length > 0 ) {
+	      for(var i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          this.todoItems.push(localStorage.key(i));
+	        }
+	        // console.log(localStorage.key(i));
+	      }
+	    }
+	  }
 	}
-}
-```
-<br />
+	```
+	<br />
 
 ### 2.8. TodoList 컴포넌트 할 일 삭제 기능 구현
 1. removeBtn을 클릭했을 때 해당 리스트(li)를 삭제하려고 한다
@@ -611,34 +611,34 @@ v-for문에서 나오는 값이 몇 개이던 가에 index. 순서를 지정해�
 3. v-for 문에서 todoItem과 index 값을 받고<br />
 그 값을 메서드에 넘길 수 있다.<br /> 
 즉, removeBtn 메서드 함수에서 todoItem과 index 값을 받아올 수 있다
-```
-<template>
-	<div>
-		<ul>
-			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
-				{{ todoItem }}
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+	        {{ todoItem }}
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
 <br />
 
 4. 받아온 값을 removeBtn 메서드 함수에도 적용하고 log로 확인해본다
-```
-export default {
-	methods: {
-		removeTodo: function(todoItem, index) {
-			console.log(todoItem, index);
-		}
-	},
-}
-```
-![2-8-1](./_images/2-8-1.png)<br />
-<br />
+	```JAVASCRIPT
+	export default {
+	  methods: {
+	    removeTodo: function(todoItem, index) {
+	      console.log(todoItem, index);
+	    }
+	  },
+	}
+	```
+	![2-8-1](./_images/2-8-1.png)<br />
+	<br />
 
 5. removeBtn을 클릭했을 때 받아온 todoItem과 Index를 이용해 삭제 기능을 구현한다
 	1. **로컬스토리지에서 removeItem() API를 이용하여 해당 아이템을 삭제**한다
@@ -658,12 +658,12 @@ export default {
 		this.todoItems.splice(index, 1);
 		```
 	4. 따라서, removeBtn 메서드 함수를 아래와 같이 적용한다
-	```
+	```JAVASCRIPT
 	methods: {
-		removeTodo: function(todoItem, index) {
-			localStorage.removeItem(todoItem);
-			this.todoItems.splice(index, 1);
-		}
+	  removeTodo: function(todoItem, index) {
+	    localStorage.removeItem(todoItem);
+	    this.todoItems.splice(index, 1);
+	  }
 	},
 	```
 <br />
@@ -674,32 +674,32 @@ export default {
 
 1. 체크버튼을 추가하고 toggleComplate 메서드 클릭이벤트를 연결한다<br />
 class="checkBtn fas fa-check" v-on:click="toggleComplate"
-```HTML
-<template>
-	<div>
-		<ul>
-			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
-				<i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
-				{{ todoItem }}
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
-```JAVASCRIPT
-export default {
-	data: function() {
-	},
-	methods: {
-		toggleComplate: function() {
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+	        <i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
+	        {{ todoItem }}
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	  },
+	  methods: {
+	    toggleComplate: function() {
 			
-		}
-	},
-}
-```
+	    }
+	  },
+	}
+	```
 <br />
 
 2. [ TodoInput.vue ] setItem에서 key, value를 구분하지 않고 넣은 코드를 수정한다
@@ -708,44 +708,44 @@ export default {
 	- 적용한 obj를 setItem 의 value 값에 적용한다
 	- stringify : 자바스크립트 obj(객체)를 스트링으로 변환해주는 API<br />
 	스트링으로 변환을 해야 로컬스토리지에 value 값이 적용된다.
-```JAVASCRIPT
-methods: {
-	addTodo: function() {
-		var obj = {
-			completed: false,
-			item: this.newTodoItem,
-		};
-		localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
-		this.clearInput();
-	},
-	clearInput: function() {
-		this.newTodoItem = ""
+	```JAVASCRIPT
+	methods: {
+	  addTodo: function() {
+	    var obj = {
+	      completed: false,
+	      item: this.newTodoItem,
+	    };
+	    localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+	    this.clearInput();
+	  },
+	  clearInput: function() {
+	    this.newTodoItem = ""
+	  }
 	}
-}
-```
-![2-9-1](./_images/2-9-1.png)<br />
-<br />
+	```
+	![2-9-1](./_images/2-9-1.png)<br />
+	<br />
 
 3. [ TodoInput.vue ] input에 값이 있을 경우에만 addTodo 메서드 함수가 실행되게 코드를 보완한다.
 	- if문으로 조건을 적용해준다
 	- 조건 : this.newTodoItem !== '' <br />
 	(!== 는 false를 의미한다. '' 값이 없을 때의 반대는 값이 있을 떄)
-```JAVASCRIPT
-methods: {
-	addTodo: function() {
-		if(this.newTodoItem !== '') {
-			var obj = {
-				completed: false,
-				item: this.newTodoItem,
-			};
-			// console.log(this.newTodoItem);
-			// 저장하는 로직
-			localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
-			this.clearInput();
-		}
-	},
-}
-```
+	```JAVASCRIPT
+	methods: {
+	  addTodo: function() {
+	    if(this.newTodoItem !== '') {
+	      var obj = {
+	        completed: false,
+	        item: this.newTodoItem,
+	      };
+	      // console.log(this.newTodoItem);
+	      // 저장하는 로직
+	      localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+	      this.clearInput();
+	    }
+	  },
+	}
+	```
 <br />
 
 4. [ TodoList.vue ] TodoInput.vue 파일에서 로컬스토리지에 저장할 때의 value 값을 수정하였기 때문에 TodoList.vue 파일에서 코드를 수정해줘야 한다.
@@ -755,353 +755,353 @@ methods: {
 	- key 값을 getItem 으로 받아와서 log창에 value 값이 출력된 것을 확인할 수 있다
 	- TodoInput.vue 파일에서 setItem() 불러올 때 stringify() 문자열로 변환했기 때문에 동일하게 문자열(string)로 값을 받아오게 된다.<br />
 	console.log(typeof localStorage.getItem(localStorage.key(i)));
-```
-created: function() {
-	if ( localStorage.length > 0 ) {
-		for(var i=0; i < localStorage.length; i++) {
-			if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-				// this.todoItems.push(localStorage.key(i));
+	```JAVASCRIPT
+	created: function() {
+	  if ( localStorage.length > 0 ) {
+	    for(var i=0; i < localStorage.length; i++) {
+	      if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	        // this.todoItems.push(localStorage.key(i));
 
-				console.log(localStorage.getItem(localStorage.key(i)));
-			}
-		}
+	        console.log(localStorage.getItem(localStorage.key(i)));
+	      }
+	    }
+	  }
 	}
-}
-```
-![2-9-2](./_images/2-9-2.png)<br />
-<br />
+	```
+	![2-9-2](./_images/2-9-2.png)<br />
+	<br />
 
 5. 스트링(문자열)으로 받아온 것을 오브젝트(객체)로 변화시킨다
 	- parse() 을 사용하여 문자열 -> 객체로 변환한다
-```JAVASCRIPT
-created: function() {
-	if ( localStorage.length > 0 ) {
-		for(var i=0; i < localStorage.length; i++) {
-			if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-				// this.todoItems.push(localStorage.key(i));
+	```JAVASCRIPT
+	created: function() {
+	  if ( localStorage.length > 0 ) {
+	    for(var i=0; i < localStorage.length; i++) {
+	      if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	        // this.todoItems.push(localStorage.key(i));
 
-				console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
-			}
-		}
+	        console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	      }
+	    }
+	  }
 	}
-}
-```
-![2-9-3](./_images/2-9-3.png)<br />
-<br />
+	```
+	![2-9-3](./_images/2-9-3.png)<br />
+	<br />
 
 6. 불러온 정보를 화면에 출력한다
-```JAVASCRIPT
-created: function() {
-	if ( localStorage.length > 0 ) {
-		for(var i=0; i < localStorage.length; i++) {
-			if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-				this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-			}
-		}
+	```JAVASCRIPT
+	created: function() {
+	  if ( localStorage.length > 0 ) {
+	    for(var i=0; i < localStorage.length; i++) {
+	      if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	        this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	      }
+	    }
+	  }
 	}
-}
-```
-![2-9-4](./_images/2-9-4.png)<br />
-<br />
+	```
+	![2-9-4](./_images/2-9-4.png)<br />
+	<br />
 
 7. 객체의 정보 중 item 값만 보이게 수정을 한다
-```HTML
-<template>
-	<div>
-		<ul>
-			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
-				<i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
-				{{ todoItem.item }}
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
-![2-9-5](./_images/2-9-5.png)<br />
-<br />
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+	        <i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
+	        {{ todoItem.item }}
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
+	![2-9-5](./_images/2-9-5.png)<br />
+	<br />
 
 8. 수정한 {{ todoItem.item }} 부분을 span으로 감싸고 css를 적용해준다
-```HTML
-<template>
-	<div>
-		<ul>
-			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
-				<i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
-				<span class="textCompleted">{{ todoItem.item }}</span>
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
-<br />
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+	        <i class="checkBtn fas fa-check" v-on:click="toggleComplate"></i>
+	        <span class="textCompleted">{{ todoItem.item }}</span>
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
+	<br />
 
 9. i.checkBtn 과 span.textCompleted 에 v-bind로 클래스 조건을 걸어준다<br />
 	- checkBtn 경우, completed 값이 true면 checkBtnCompleted 클래스가 추가 된다
 	- span 경우, completed 값이 true면 todoItems.completed 클래스가 추가 된다
-```HTML
-<template>
-	<div>
-		<ul>
-			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
-				<i class="checkBtn fas fa-check" v-bind:class="{checkBtnCompleted: todoItem.completed}" v-on:click="toggleComplate"></i>
-				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
-<br />
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+	        <i class="checkBtn fas fa-check" v-bind:class="{checkBtnCompleted: todoItem.completed}" v-on:click="toggleComplate"></i>
+	        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
+	<br />
 
 10. completed 값을 true 또는 false 로 변경하기 위해 checkBtn 클릭 시 todoItem과 Index 정보를 받아온다
 	- log 창에서 클릭한 checkBtn의 todoItem 정보를 확인할 수 있다
-```HTML
-<template>
-	<div>
-		<ul>
-			<li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
-				<i class="checkBtn fas fa-check" 
-					v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-					v-on:click="toggleComplate(todoItem, index)"></i>
-				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
-```JAVASCRIPT
-methods: {
-	toggleComplate: function(todoItem, index) {
-		console.log(todoItem);
-	}
-},
-```
-![2-9-6](./_images/2-9-6.png)<br />
-<br />
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+	        <i class="checkBtn fas fa-check" 
+	          v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+	          v-on:click="toggleComplate(todoItem, index)"></i>
+	        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
+	```JAVASCRIPT
+	methods: {
+	  toggleComplate: function(todoItem, index) {
+	    console.log(todoItem);
+	  }
+	},
+	```
+	![2-9-6](./_images/2-9-6.png)<br />
+	<br />
 
 11. todoItem의 completed 값을 클릭할 때마다 바꿔준다
 	- 로컬스토리지의 값은 변경되지 않는다.
-```JAVASCRIPT
-methods: {
-	toggleComplate: function(todoItem, index) {
-		todoItem.completed = !todoItem.completed;
-	}
-},
-```
-![2-9-7](./_images/2-9-7.png)<br />
-<br />
+	```JAVASCRIPT
+	methods: {
+	  toggleComplate: function(todoItem, index) {
+	    todoItem.completed = !todoItem.completed;
+	  }
+	},
+	```
+	![2-9-7](./_images/2-9-7.png)<br />
+	<br />
 
 12. 로컬스토리지의 completed 값도 변경한다.<br />
 로컬스토리지에서는 업데이트 해주는 API가 없기 때문에 삭제 후 추가해야 한다.
-```JAVASCRIPT
-methods: {
-	toggleComplate: function(todoItem, index) {
-		todoItem.completed = !todoItem.completed;
-		
-		// 로컬스토리지의 데이터를 갱신
-		// 기존의 정보를 삭제한다 (로컬스토리지에서는 업데이트 해주는 기능이 없다)
-		localStorage.removeItem(todoItem.item);
-		localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-	}
-},
-```
-![2-9-8](./_images/2-9-8.png)<br />
-<br />
+	```JAVASCRIPT
+	methods: {
+	  toggleComplate: function(todoItem, index) {
+	    todoItem.completed = !todoItem.completed;
+	
+	    // 로컬스토리지의 데이터를 갱신
+	    // 기존의 정보를 삭제한다 (로컬스토리지에서는 업데이트 해주는 기능이 없다)
+	    localStorage.removeItem(todoItem.item);
+	    localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	  }
+	},
+	```
+	![2-9-8](./_images/2-9-8.png)<br />
+	<br />
 
 ### 2.10. TodoFooter 컴포넌트 구현
 Clear All 버튼을 생성하여 클릭했을 때 Todo List 삭제를 하려고 한다<br />
 <br />
 
 1. 마크업/CSS 작업
-```HTML
-<template>
-	<div class="clearAllContainer">
-		<span class="clearAllBtn">Clear All</span>
-	</div>
-</template>
-```
-```CSS
-.clearAllContainer {
-	width: 8.5rem;
-	height: 50px;
-	line-height: 50px;
-	background-color: #fff;
-	border-radius: 5px;
-	margin: 0 auto;
-}
-.clearAllBtn {
-	color: #e20302;
-	display: block;
-}
-```
+	```HTML
+	<template>
+	  <div class="clearAllContainer">
+	    <span class="clearAllBtn">Clear All</span>
+	  </div>
+	</template>
+	```
+	```CSS
+	.clearAllContainer {
+	  width: 8.5rem;
+	  height: 50px;
+	  line-height: 50px;
+	  background-color: #fff;
+	  border-radius: 5px;
+	  margin: 0 auto;
+	}
+	.clearAllBtn {
+	  color: #e20302;
+	  display: block;
+	}
+	```
 <br />
 
 2. clearAll 버튼에 v-on:click 이벤트를 적용하여 clearTodo 메서드를 연결한다
-```HTML
-<template>
-	<div class="clearAllContainer">
-		<span class="clearAllBtn" v-on:click="clearTodo">Clear All</span>
-	</div>
-</template>
-```
-```JAVASCRIPT
-export default {
-	methods: {
-		clearTodo: function() {
+	```HTML
+	<template>
+	  <div class="clearAllContainer">
+	    <span class="clearAllBtn" v-on:click="clearTodo">Clear All</span>
+	  </div>
+	</template>
+	```
+	```JAVASCRIPT
+	export default {
+	  methods: {
+	    clearTodo: function() {
 			
-		}
+	    }
+	  }
 	}
-}
-```
-<br />
+	```
+	<br />
 
 3. 로컬 스토리지의 내역을 삭제한다 <br />
 clear() 로 로컬 스토리지의 삭제를 한다
-```JAVASCRIPT
-export default {
-	methods: {
-		clearTodo: function() {
-			localStorage.clear();
-		}
+	```JAVASCRIPT
+	export default {
+	  methods: {
+	    clearTodo: function() {
+	      localStorage.clear();
+	    }
+	  }
 	}
-}
-```
+	```
 <br /><br /><br />
 
 ## 3. Todo App - 애플리케이션 구조 개선하기
 ### 3.1. [리팩토링] 할 일 목록 표시 기능
 1. 애플리케이션 구조를 개선한다 (아래 이미지 참고)<br />
 	- App 컴포넌트를 Container로 생각하면 된다
-![3-1-1](./_images/3-1-1.png)<br />
-<br />
+	![3-1-1](./_images/3-1-1.png)<br />
+	<br />
 
 2. 각각의 컴포넌트에서 했던 로직들을 App.vue 파일에 끌어온다
 
 3. 리스트를 먼저 뿌려보려고 한다. <br />
 [ TodoList.vue ] 에서 created: function {} 코드를 [ App.vue ]에 적용한다
-```JAVASCRIPT
-// App.vue
-export default {
-  created: function() {
-    if ( localStorage.length > 0 ) {
-      for(var i=0; i < localStorage.length; i++) {
-        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-        }
-      }
-    }
-  },
-  components: {
-    // 컴포넌트 태그명 : 컴포넌트 내용
-    'TodoHeader' : TodoHeader,
-    'TodoInput' : TodoInput,
-    'TodoList' : TodoList,
-    'TodoFooter' : TodoFooter,
-  }
-}
-```
+	```JAVASCRIPT
+	// App.vue
+	export default {
+	  created: function() {
+	    if ( localStorage.length > 0 ) {
+	      for(var i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	        }
+	      }
+	    }
+	  },
+	  components: {
+	    // 컴포넌트 태그명 : 컴포넌트 내용
+	    'TodoHeader' : TodoHeader,
+	    'TodoInput' : TodoInput,
+	    'TodoList' : TodoList,
+	    'TodoFooter' : TodoFooter,
+	  }
+	}
+	```
 <br />
 
 4. created 코드를 App.vue 로 적용한 후에<br />
 todoItems 정보를 담을 data 속성을 App.vue 파일에 적용을 하고
 TodoList.vue 에서는 data - todoItems 속성을 삭제한다.
-```JAVASCRIPT
-export default {
-  data: function() {
-    return {
-      todoItems: [],
-    }
-  },
-  created: function() {
-    if ( localStorage.length > 0 ) {
-      for(var i=0; i < localStorage.length; i++) {
-        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-        }
-      }
-    }
-  },
-  components: {
-    // 컴포넌트 태그명 : 컴포넌트 내용
-    'TodoHeader' : TodoHeader,
-    'TodoInput' : TodoInput,
-    'TodoList' : TodoList,
-    'TodoFooter' : TodoFooter,
-  }
-}
-```
+	```JAVASCRIPT
+	export default {
+	  data: function() {
+	    return {
+	      todoItems: [],
+	    }
+	  },
+	  created: function() {
+	    if ( localStorage.length > 0 ) {
+	      for(var i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	        }
+	      }
+	    }
+	  },
+	  components: {
+	    // 컴포넌트 태그명 : 컴포넌트 내용
+	    'TodoHeader' : TodoHeader,
+	    'TodoInput' : TodoInput,
+	    'TodoList' : TodoList,
+	    'TodoFooter' : TodoFooter,
+	  }
+	}
+	```
 <br />
 
 5. [ App.vue ] 에 todoItems 정보가 저장이 된다.<br />
 저장된 정보를 TodoList에 넘겨줘야 한다 (props)
-```HTML
-// App.vue
-<TodoList v-bind:내려보낼 프롭스 속성이름="현재 위치의 컴포넌트 데이터속성"></TodoList>
-```
+	```HTML
+	// App.vue
+	<TodoList v-bind:내려보낼 프롭스 속성이름="현재 위치의 컴포넌트 데이터속성"></TodoList>
+	```
 따라서 위의 규칙의 맞게 TodoList v-bind 연결한다<br />
 내려보낼 프롭스 속성이름을 propsdata 라고 지정한다
-```HTML
-<TodoList v-bind:propsdata="todoItems"></TodoList>
-```
+	```HTML
+	<TodoList v-bind:propsdata="todoItems"></TodoList>
+	```
 <br />
 
 6. [ App.vue ] 에서 프롭스 이름을 설정한 후,
 [ TodoList.vue ]에서 프롭스 정보를 전달 받아야 하기 때문에
 해당 파일에서 프롭스 정보를 적용한다
-```JAVASCRIPT
-// TodoList.vue
-export default {
-	props: ['propsdata'],
-	methods: {
-		removeTodo: function(todoItem, index) {
-			localStorage.removeItem(todoItem);
-			this.todoItems.splice(index, 1);
-		},
-		toggleComplate: function(todoItem) {
-			todoItem.completed = !todoItem.completed;
-			localStorage.removeItem(todoItem.item);
-			localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-		}
-	},
-}
-```
+	```JAVASCRIPT
+	// TodoList.vue
+	export default {
+	  props: ['propsdata'],
+	  methods: {
+	    removeTodo: function(todoItem, index) {
+	      localStorage.removeItem(todoItem);
+	      this.todoItems.splice(index, 1);
+	    },
+	    toggleComplate: function(todoItem) {
+	      todoItem.completed = !todoItem.completed;
+	      localStorage.removeItem(todoItem.item);
+	      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	    }
+	  },
+	}
+	```
 <br />
 
 7. propsdata 를 전달 받았기 때문에 TodoList.vue에서 v-for문을 수정한다
 	- v-for문에서 todoItems -> propsdata
-```HTML
-<template>
-	<div>
-		<ul>
-			<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
-				<i class="checkBtn fas fa-check" 
-					v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-					v-on:click="toggleComplate(todoItem)"></i>
-				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-					<i class="fas fa-trash-alt"></i>
-				</span>
-			</li>
-		</ul>
-	</div>
-</template>
-```
+	```HTML
+	<template>
+	  <div>
+	    <ul>
+	      <li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+	        <i class="checkBtn fas fa-check" 
+	          v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+	          v-on:click="toggleComplate(todoItem)"></i>
+	        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </ul>
+	  </div>
+	</template>
+	```
 <br />
 
 8. 여기까지 수정 한 후, 브라우저에서 확인을 해보면 아래와 같이 제대로 동작하는 것을 확인할 수 있다.
-![3-1-2](./_images/3-1-2.png)<br />
-<br />
+	![3-1-2](./_images/3-1-2.png)<br />
+	<br />
 
 ### 3.2. 할 일 추가 기능
 TodoInput 에서 add 한 기능과 todoItems 를 연동시키려고 한다.<br />
@@ -1113,63 +1113,63 @@ TodoInput 에서 add 한 기능과 todoItems 를 연동시키려고 한다.<br /
 <br />
 
 2. [ App.vue ] TodoInput 컴포넌트 태그에 이벤트 발생을 적용시킨다.
-```HTML
-<TodoInput v-on:하위 컴포넌트에서 발생시킨 이벤트 이름="현재 컴포넌트의 메서드 이름"></TodoInput>
-```
+	```HTML
+	<TodoInput v-on:하위 컴포넌트에서 발생시킨 이벤트 이름="현재 컴포넌트의 메서드 이름"></TodoInput>
+	```
 <br />
 
 3. [ App.vue ] TodoInput 컴포넌트 태그에 적용할 메서드를 추가한다
 	- 추가 메서드 이름 : addOneItem
-```JAVASCRIPT
-methods: {
-	addOneItem: function() {
+	```JAVASCRIPT
+	methods: {
+	  addOneItem: function() {
 		
-	}
-},
-```
+	  }
+	},
+	```
 <br />
 
 4. TodoInput.vue 에서 로컬스토리지로 정보를 추가하는 코드를 App.vue 에 적용한다.
 	- localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
-```JAVASCRIPT
-methods: {
-	addOneItem: function() {
-		var obj = {
-			completed: false,
-			item: this.newTodoItem,
-		};
-		localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
-	}
-},
-```
+	```JAVASCRIPT
+	methods: {
+	  addOneItem: function() {
+	    var obj = {
+	      completed: false,
+	      item: this.newTodoItem,
+	    };
+	    localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+	  }
+	},
+	```
 <br />
 
 5. [ TodoInput.vue ] newTodoItem 값을 상위로 전달하기 위해 이벤트 $emit을 이용한다
-	- this.$emit('이벤트 이름', 인자1, 인자2, ..)
-```JAVASCRIPT
-methods: {
-	addTodo: function() {
-		if(this.newTodoItem !== '') {
-			this.$emit('addTodoItem', this.newTodoItem)
-			this.clearInput();
-		}
-	},
-}
-```
+  - this.$emit('이벤트 이름', 인자1, 인자2, ..)
+	```JAVASCRIPT
+	methods: {
+	  addTodo: function() {
+	    if(this.newTodoItem !== '') {
+	      this.$emit('addTodoItem', this.newTodoItem)
+	      this.clearInput();
+	    }
+	  },
+	}
+	```
 <br />
 
 6. 전달받은 addTodoItem 이벤트 $emit 을 App.vue 파일에 연결한다
 	- v-on:하위 컴포넌트에서 발생시킨 이벤트 이름="현재 컴포넌트의 메서드 이름"
-```HTML
-<template>
-  <div id="app">
-    <TodoHeader></TodoHeader>
-    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
-    <TodoList v-bind:propsdata="todoItems"></TodoList>
-    <TodoFooter></TodoFooter>
-  </div>
-</template>
-```
+	```HTML
+	<template>
+	  <div id="app">
+	    <TodoHeader></TodoHeader>
+	    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
+	    <TodoList v-bind:propsdata="todoItems"></TodoList>
+	    <TodoFooter></TodoFooter>
+	  </div>
+	</template>
+	```
 <br />
 
 7. 로직을 정리하면,
@@ -1183,186 +1183,184 @@ methods: {
 	- addOneItem에서 매개변수 todoItem 으로 받는다
 	- this.newTodoItem ==> todoItem 으로 수정하여 <br />
 	TodoInput.vue에서 전달받은 값을 적용한다
-```JAVASCRIPT
-methods: {
-	addOneItem: function(todoItem) {
-		var obj = {
-			completed: false,
-			item: todoItem,
-		};
-		localStorage.setItem(todoItem, JSON.stringify(obj));
-	}
-},
-```
+	```JAVASCRIPT
+	methods: {
+	  addOneItem: function(todoItem) {
+	    var obj = {
+	      completed: false,
+	      item: todoItem,
+	    };
+	    localStorage.setItem(todoItem, JSON.stringify(obj));
+	  }
+	},
+	```
 <br />
 
 9. App.vue 의 data - todoItems 속성 배열에도 추가되게 코드 보완
 	- input 에 입력하면 자동으로 아래 리스트에 내용이 추가된다
-```JAVASCRIPT
-methods: {
-	addOneItem: function(todoItem) {
-		var obj = {
-			completed: false,
-			item: todoItem,
-		};
-		localStorage.setItem(todoItem, JSON.stringify(obj));
-		this.todoItems.push(obj);
-	}
-},
-```
-![3-1-3](./_images/3-1-3.png)<br />
-<br />
+	```JAVASCRIPT
+	methods: {
+	  addOneItem: function(todoItem) {
+	    var obj = {
+	      completed: false,
+	      item: todoItem,
+	    };
+	    localStorage.setItem(todoItem, JSON.stringify(obj));
+	    this.todoItems.push(obj);
+	  }
+	},
+	```
+	![3-1-3](./_images/3-1-3.png)<br />
+	<br />
 
 ### 3.3. 할 일 삭제 기능
 1. App.vue 에서 TodoList 컴포넌트에 v-on 디렉티브를 이용해 이벤트를 연결한다 
 	- removeItem 이 발생했을 때, removeOneItem 이라는 메서드 함수가 실행
-```HTML
-// App.vue
-<template>
-  <div id="app">
-    <TodoHeader></TodoHeader>
-    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
-    <TodoList v-bind:propsdata="todoItems" v-on:removeItem="removeOneItem"></TodoList>
-    <TodoFooter></TodoFooter>
-  </div>
-</template>
-```
-```JAVASCRIPT
-methods: {
-	removeOneItem: function() {
-
-	}
-},
-```
+	```HTML
+	// App.vue
+	<template>
+	  <div id="app">
+	    <TodoHeader></TodoHeader>
+	    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
+	    <TodoList v-bind:propsdata="todoItems" v-on:removeItem="removeOneItem"></TodoList>
+	    <TodoFooter></TodoFooter>
+	  </div>
+	</template>
+	```
+	```JAVASCRIPT
+	methods: {
+	  removeOneItem: function() {
+	  }
+	},
+	```
 <br />
 
 2. TodoList.vue 의 removeTodo 메서드 함수에서<br />
 매개변수로 받은 todoItem, Index 를 $emit 으로 그대로 전달한다.
-```JAVASCRIPT
-methods: {
-	removeTodo: function(todoItem, index) {
-		this.$emit('removeItem', todoItem, index);
+	```JAVASCRIPT
+	methods: {
+	  removeTodo: function(todoItem, index) {
+	    this.$emit('removeItem', todoItem, index);
+	  },
 	},
-},
-```
-<br />
+	```
+	<br />
 
 3. TodoList.vue 에 있었던 로컬스토리지에 관한 코드는 App.vue 의 removeOneItem 메서드에 적용한다
 	- localStorage.removeItem(todoItem.item) 경우 특정 key 값을 적용해야 remove 된다.
-```JAVASCRIPT
-methods: {
-	removeOneItem: function(todoItem, index) {
-		localStorage.removeItem(todoItem.item);
-		this.todoItems.splice(index, 1);
+	```JAVASCRIPT
+	methods: {
+	  removeOneItem: function(todoItem, index) {
+	    localStorage.removeItem(todoItem.item);
+	    this.todoItems.splice(index, 1);
+	  }
 	}
-}
-```
-<br />
+	```
+	<br />
 
 ### 3.4. 할 일 완료 기능
 1. App.vue 의 메서드 toggleOneItem을 생성한다
-```JAVASCRIPT
-// App.vue
-toggleOneItem: function(todoItem, index) {
-      
-}
-```
+	```JAVASCRIPT
+	// App.vue
+	toggleOneItem: function(todoItem, index) {
+	}
+	```
 <br />
 
 2. TodoList.vue 의 toggleComplate 메서드에 적용되었던 코드를<br />
 App.vue 에 그대로 적용한다.
-```JAVASCRIPT
-// App.vue
-toggleOneItem: function(todoItem, index) {
-	todoItem.completed = !todoItem.completed;
-	localStorage.removeItem(todoItem.item);
-	localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-}
-```
-<br />
+	```JAVASCRIPT
+	// App.vue
+	toggleOneItem: function(todoItem, index) {
+	  todoItem.completed = !todoItem.completed;
+	  localStorage.removeItem(todoItem.item);
+	  localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	}
+	```
+	<br />
 
 3. TodoList.vue 의 toggleComplate 메서드에 이벤트를 발생시킨다
-```JAVASCRIPT
-// TodoList.vue
-methods: {
-	toggleComplate: function(todoItem, index) {
-		this.$emit('toggleItem', todoItem, index);
-	}
-},
-```
+	```JAVASCRIPT
+	// TodoList.vue
+	methods: {
+	  toggleComplate: function(todoItem, index) {
+	    this.$emit('toggleItem', todoItem, index);
+	  }
+	},
+	```
 <br />
 
 4. App.vue 에서 TodoList 컴포넌트에 v-on 디렉티브로 이벤트를 연결한다
-```HTML
-<template>
-  <div id="app">
-    <TodoHeader></TodoHeader>
-    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
-    <TodoList 
-      v-bind:propsdata="todoItems" 
-      v-on:removeItem="removeOneItem"
-      v-on:toggleItem="toggleOneItem"></TodoList>
-    <TodoFooter></TodoFooter>
-  </div>
-</template>
-```
-<br />
+	```HTML
+	<template>
+	  <div id="app">
+	    <TodoHeader></TodoHeader>
+	    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
+	    <TodoList 
+	      v-bind:propsdata="todoItems" 
+	      v-on:removeItem="removeOneItem"
+	      v-on:toggleItem="toggleOneItem"></TodoList>
+	    <TodoFooter></TodoFooter>
+	  </div>
+	</template>
+	```
+	<br />
 
 5. TodoList.vue 에서 전달받은 todoItem 의 값을 그대로 받아 바꿔주는 것은<br />
 **옮지 않은 방법**으로 **App.vue에서 전달받은 todoItems 속성을 이용해 코드를 보완**한다.
-```JAVASCRIPT
-// 옮지 않은 방법
-methods: {
-	toggleOneItem: function(todoItem, index) {
-		todoItem.completed = !todoItem.completed;
+	```JAVASCRIPT
+	// 옮지 않은 방법
+	methods: {
+	  toggleOneItem: function(todoItem, index) {
+	    todoItem.completed = !todoItem.completed;
 
-		// 로컬 스토리지의 데이터 갱싱
-		localStorage.removeItem(todoItem.item);
-		localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-	}
-},
-```
-```JAVASCRIPT
-// 보완
-methods: {
-	toggleOneItem: function(todoItem, index) {
-		this.todoItems[index].completed = !this.todoItems[index].completed
+	    // 로컬 스토리지의 데이터 갱싱
+	    localStorage.removeItem(todoItem.item);
+	    localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	  }
+	},
+	```
+	```JAVASCRIPT
+	// 보완
+	methods: {
+	  toggleOneItem: function(todoItem, index) {
+	    this.todoItems[index].completed = !this.todoItems[index].completed
 
-		// 로컬 스토리지의 데이터 갱싱
-		localStorage.removeItem(todoItem.item);
-		localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-	}
-},
-```
+	    // 로컬 스토리지의 데이터 갱싱
+	    localStorage.removeItem(todoItem.item);
+	    localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+	  }
+	},
+	```
 <br />
 
 ### 3.5. 할 일 모두 삭제 기능
 1. TodoFooter.vue 에 적용된 clearTodo 메서드에 적용한 코드를<br />
 App.vue에서 clearAllItem 메서드 함수를 만들고 여기에 코드를 적용한다
-```JAVASCRIPT
-methods: {
-	clearAllItem: function() {
-		localStorage.clear();
-	}
-},
-```
+	```JAVASCRIPT
+	methods: {
+	  clearAllItem: function() {
+	    localStorage.clear();
+	  }
+	},
+	```
 <br />
 
 2. TodoFooter.vue 의 clearTodo 메서드에 이벤트 $emit 을 적용한다
-```JAVASCRIPT
-methods: {
-	clearTodo: function() {
-		this.$emit('clearAll');
+	```JAVASCRIPT
+	methods: {
+	  clearTodo: function() {
+	    this.$emit('clearAll');
+	  }
 	}
-}
-```
+	```
 <br />
 
 3. App.vue 의 TodoFooter 컴포넌트에 v-on 디렉티브를 이용해<br />
 $emit 으로 만든  이벤트과 App.vue의 clearAllItem 이벤트를 연결한다.
-```HTML
-<TodoFooter v-on:clearAll="clearAllItem"></TodoFooter>
-```
+	```HTML
+	<TodoFooter v-on:clearAll="clearAllItem"></TodoFooter>
+	```
 
 4. 위 코드 대로 적용을 하면 로컬스토리지의 내역만 삭제되고
 리스트에 적용된 todoItems 는 그대로 보여진다.
@@ -1370,14 +1368,14 @@ $emit 으로 만든  이벤트과 App.vue의 clearAllItem 이벤트를 연결한
 5. App.vue 의 clearTodo 메서드 함수 todoItems 삭제 코드도 적용한다
 	- this.todoItems = []<br />
 	todoItems를 빈 배열로 초기화 시키다는 뜻.
-```JAVASCRIPT
-methods: {
-	clearTodo: function() {
-		this.$emit('clearAll');
-		this.todoItems = [];
+	```JAVASCRIPT
+	methods: {
+	  clearTodo: function() {
+	    this.$emit('clearAll');
+	    this.todoItems = [];
+	  }
 	}
-}
-```
+	```
 
 <br />
 
@@ -1416,55 +1414,55 @@ https://vuejs.org/v2/examples/modal.html
 	4. 공식문서의 style 값도 복사 > 붙여넣기 한다
 
 	5. TodoInput.vue 컴포넌트에 생성한 Modal.vue 컴포넌트를 하위 컴포넌트로 적용한다
-	```JAVASCRIPT
-	//TodoInput.vue
-	import Modal from './common/Modal.vue';
+		```JAVASCRIPT
+		//TodoInput.vue
+		import Modal from './common/Modal.vue';
 
-	export default {
-		components: {
-			Modal: Modal,
+		export default {
+		  components: {
+		    Modal: Modal,
+		  }
 		}
-	}
-	```
+		```
 	<br />
 
 	6. 공식문서에서 #app 에 적용된 내용을 복사하여 TodoInput.vue에 적용한다<br />
 	그리고 Modal로 등록한 컴포넌트 이름으로 수정한다<br />
 	(공식문서 modal -> Modal)
-	```HTML
-	<template>
-		<div class="inputBox shadow">
-			<input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo">
-			<!-- <button v-on:click="addTodo">add</button> -->
-			<span class="addContainer" v-on:click="addTodo">
-				<i class="fas fa-plus addBtn"></i>
-			</span>
-			<Modal v-if="showModal" @close="showModal = false">
-				<h3 slot="header">custom header</h3>
-			</Modal>
-		</div>
-	</template>
-	```
+		```HTML
+		<template>
+		  <div class="inputBox shadow">
+		    <input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo">
+		    <!-- <button v-on:click="addTodo">add</button> -->
+		    <span class="addContainer" v-on:click="addTodo">
+		      <i class="fas fa-plus addBtn"></i>
+		    </span>
+		    <Modal v-if="showModal" @close="showModal = false">
+		      <h3 slot="header">custom header</h3>
+		    </Modal>
+		  </div>
+		</template>
+		```
 	![4-1-3](./_images/4-1-3.png)<br />
 	<br />
 
 	7. 공식문서에서 #app 에 적용된 data 속성도 동일하게 TodoInput.vue에 적용한다
-	```JAVASCRIPT
-	import Modal from './common/Modal.vue';
+		```JAVASCRIPT
+		import Modal from './common/Modal.vue';
 
-	export default {
-		data: function() {
-			return {
-				showModal: false,
-			}
-		},
-		components: {
-			Modal: Modal,
+		export default {
+		  data: function() {
+		    return {
+		      showModal: false,
+		    }
+		  },
+		  components: {
+		    Modal: Modal,
+		  }
 		}
-	}
-	```
-	![4-1-4](./_images/4-1-4.png)<br />
-	<br />
+		```
+		![4-1-4](./_images/4-1-4.png)<br />
+		<br />
 
 	8. **slot 이란?**
 		- slot은 뷰의 유용한 기능
@@ -1475,48 +1473,48 @@ https://vuejs.org/v2/examples/modal.html
 			```HTML
 			<!-- Modal 컴포넌트 -->
 			<Modal v-if="showModal" @close="showModal = false">
-				<!--
-					you can use custom content here to overwrite
-					default content
-				-->
-				<h3 slot="header">custom header</h3>
+			  <!--
+			    you can use custom content here to overwrite
+			    default content
+			  -->
+			  <h3 slot="header">custom header</h3>
 			</Modal>
 			```
 		- TodoInput.vue 에서 slot 테스트
 			1. TodoInput.vue에서 h3 내용을 경고로 수정한다
 			```HTML
 			<Modal v-if="showModal" @close="showModal = false">
-				<h3 slot="header">경고</h3>
+			  <h3 slot="header">경고</h3>
 			</Modal>
 			```
 			2. 현재 showModal: false 로 적용되어 있다<br />
 			즉, Modal v-if="showModal" 이 뜻은 false 이면 보이지 않는다는 뜻.<br />
 			**TodoInput.vue 에서 false 값을 True 바꿔주는 코드를 작성**한다<br />
 			this.showModal = !this.showModal
-			```
-			export default {
-				data: function() {
-					return {
-						newTodoItem: "",
-						showModal: false,
-					}
-				},
-				methods: {
-					addTodo: function() {
-						if(this.newTodoItem !== '') {
-							this.$emit('addTodoItem', this.newTodoItem)
-							this.clearInput();
-						} else {
-							this.showModal = !this.showModal
-						}
-					},
+				```JAVASCRIPT
+				export default {
+				  data: function() {
+				    return {
+				      newTodoItem: "",
+				      showModal: false,
+				    }
+				  },
+				  methods: {
+				    addTodo: function() {
+				      if(this.newTodoItem !== '') {
+				        this.$emit('addTodoItem', this.newTodoItem)
+				        this.clearInput();
+				      } else {
+				        this.showModal = !this.showModal
+				      }
+				    },
+				  }
 				}
-			}
-			```
+				```
 
 			3. 아무 내용없이 클릭하면 해당 모달 창이 뜨는 것을 확인할 수 있다
-			![4-1-6](./_images/4-1-6.png)<br />
-			<br />
+				![4-1-6](./_images/4-1-6.png)<br />
+				<br />
 			
 			4. 모달 창에서 header 부분이 바뀐 것을 확인할 수 있다
 				- Modal.vue 에서는 *default header 로 보여지는데*
@@ -1525,57 +1523,57 @@ https://vuejs.org/v2/examples/modal.html
 					![4-1-7](./_images/4-1-7.png)<br />
 					<br />
 			5. **Modal.vue 에서 slot 으로 정의한 부분이 TodoInput.vue에서 slot 으로 정의한 부분으로 대체된다(바뀐다)**
-			![4-1-9](./_images/4-1-9.png)<br />
-			<br />
+				![4-1-9](./_images/4-1-9.png)<br />
+				<br />
 
 			6. **slot name="header" 으로 등록하면 slot="header" 으로 동일한 이름을 지정하여 사용**하면 된다
 			<br />
 	
 	9. Modal.vue 에서 footer 영역은 주석처리하고<br />
 	Header 영역에 닫기 버튼을 추가한다
-	```HTML
-	// TodoInput.vue
-	<template>
-		<div class="inputBox shadow">
-			<!-- Modal 컴포넌트 -->
-			<Modal v-if="showModal" @close="showModal = false">
-				<h3 slot="header">
-					경고
-					<i class="closeModalBtn fas fa-times"></i>
-				</h3>
-				<div slot="body">무언가를 입력하세요</div>
-				<div slot="footer">copyright</div>
-			</Modal>
-		</div>
-	</template>
-	```
-	```CSS
-	// TodoInput.vue
-	.closeModalBtn {
-		color: #42b983;
-	}
-	```
+		```HTML
+		// TodoInput.vue
+		<template>
+		  <div class="inputBox shadow">
+		    <!-- Modal 컴포넌트 -->
+		    <Modal v-if="showModal" @close="showModal = false">
+		      <h3 slot="header">
+		        경고
+		        <i class="closeModalBtn fas fa-times"></i>
+		      </h3>
+		      <div slot="body">무언가를 입력하세요</div>
+		      <div slot="footer">copyright</div>
+		    </Modal>
+		  </div>
+		</template>
+		```
+		```CSS
+		// TodoInput.vue
+		.closeModalBtn {
+		  color: #42b983;
+		}
+		```
 	<br />
 
 	10. 모달 창에서 클릭했을 때의 이벤트를 적용한다
 		- **v-on:click 를 축약하면 @click**
 		- showModal = false 로 모달창을 닫는다.
-	```HTML
-	// TodoInput.vue
-	<template>
-		<div class="inputBox shadow">
-			<!-- Modal 컴포넌트 -->
-			<Modal v-if="showModal" @close="showModal = false">
-				<h3 slot="header">
-					경고
-					<i class="closeModalBtn fas fa-times" @click="showModal = false"></i>
-				</h3>
-				<div slot="body">무언가를 입력하세요</div>
-				<div slot="footer">copyright</div>
-			</Modal>
-		</div>
-	</template>
-	```
+			```HTML
+			// TodoInput.vue
+			<template>
+			  <div class="inputBox shadow">
+			    <!-- Modal 컴포넌트 -->
+			    <Modal v-if="showModal" @close="showModal = false">
+			      <h3 slot="header">
+			        경고
+			        <i class="closeModalBtn fas fa-times" @click="showModal = false"></i>
+			      </h3>
+			      <div slot="body">무언가를 입력하세요</div>
+			      <div slot="footer">copyright</div>
+			    </Modal>
+			  </div>
+			</template>
+			```
 	<br />
 
 ### 4.2. 트렌지션 소개 및 구현
@@ -1595,18 +1593,18 @@ https://vuejs.org/v2/guide/transitions.html
 <br />
 
 2. TodoList.vue 파일에 list-item 관련 css 적용한다
-```CSS
-/* TodoLIst.vue */
-
-/* 리스트 아이템 트렌지션 효과 */
-.list-enter-active, .list-leave-active {
-  transition: all 1s;
-}
-.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateY(30px);
-}
-```
+	```CSS
+	/* TodoLIst.vue */
+	
+	/* 리스트 아이템 트렌지션 효과 */
+	.list-enter-active, .list-leave-active {
+	  transition: all 1s;
+	}
+	.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+	  opacity: 0;
+	  transform: translateY(30px);
+	}
+	```
 <br />
 
 3. 아래 그림처럼 List에 적용해야하기 때문에 transition-group 를 이용한다
@@ -1617,35 +1615,34 @@ https://vuejs.org/v2/guide/transitions.html
 	![4-2-1](./_images/4-2-1.png)<br />
 	<br />
 
-4. TodoList.vue에서 li 에 트렌지션 효과를 적용하기 위해
-li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
-```HTML
-<ul>
-	<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
-		<i class="checkBtn fas fa-check" 
-			v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-			v-on:click="toggleComplate(todoItem, index)"></i>
-		<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-		<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-			<i class="fas fa-trash-alt"></i>
-		</span>
-	</li>
-</ul>
-```
+4. TodoList.vue에서 li 에 트렌지션 효과를 적용하기 위해 li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
+	```HTML
+	<ul>
+	  <li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+	    <i class="checkBtn fas fa-check" 
+	      v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+	      v-on:click="toggleComplate(todoItem, index)"></i>
+	    <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+	    <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	      <i class="fas fa-trash-alt"></i>
+	    </span>
+	  </li>
+	</ul>
+	```
 	- 위 코드에서 ul -> transition-group 변경
-```HTML
-<transition-group name="list" tag="ul">
-	<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
-		<i class="checkBtn fas fa-check" 
-			v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-			v-on:click="toggleComplate(todoItem, index)"></i>
-		<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-		<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-			<i class="fas fa-trash-alt"></i>
-		</span>
-	</li>
-</transition-group>
-```
+	```HTML
+	<transition-group name="list" tag="ul">
+	  <li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+	    <i class="checkBtn fas fa-check" 
+	      v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+	      v-on:click="toggleComplate(todoItem, index)"></i>
+	    <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+	    <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	      <i class="fas fa-trash-alt"></i>
+	    </span>
+	  </li>
+	</transition-group>
+	```
 <br />
 
 5. name은 클래스와 연관되어 있다.
@@ -1656,14 +1653,14 @@ li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
 	<br />
 
 6. **List에 추가**될 때는 **list-enter-active, list-enter-to 클래스가 추가**된 것을 확인할 수 있다.
-![4-2-3](./_images/4-2-3.png)<br />
-<br />
+	![4-2-3](./_images/4-2-3.png)<br />
+	<br />
 
 7. **List에 삭제**될 때는 **list-leave-active, list-leave-to 클래스가 삭제**된 것을 확인할 수 있다.
-![4-2-4](./_images/4-2-4.png)<br />
-<br />
-<br />
-<br />
+	![4-2-4](./_images/4-2-4.png)<br />
+	<br />
+	<br />
+	<br />
 
 ## 5. ES6 for Vue.js
 ### 5.1. ES6배경과 Babel 소개
@@ -1685,14 +1682,14 @@ li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
 - const & let : 새로운 변수 선언 방식
 - **블록 단위 { } 로 변수의 범위가 제한**되었음
 	- i는 접근이 되질 않아 값을 알 수가 없다
-	```JAVASCRIPT
-	let sum = 0;
-	for ( let i=1; i <=5; i++ ) {
-		sum = sum + i;
-	}
-	console.log(sum)	// 10
-	console.log(i)	  // Uncaught ReferenceError : i is not defined
-	```
+		```JAVASCRIPT
+		let sum = 0;
+		for ( let i=1; i <=5; i++ ) {
+			sum = sum + i;
+		}
+		console.log(sum)	// 10
+		console.log(i)	  // Uncaught ReferenceError : i is not defined
+		```
 	<br />
 	
 - **const** : 한 번 선언한 값에 대해서 **변경할 수 없음**(상수 개념)
@@ -1719,14 +1716,14 @@ li를 감싸는 ul을 transition-group 으로 변경하여 li를 감싸준다.
 #### 5.3.1 변수의 Scope(스코프)
 - 기존 자바스크립트(ES5)는 { }에 상관없이 스코프가 설정됨
 - 스코프는 블록의 유효범위
-```JAVASCRIPT
-var sum = 0;
-for ( var i=1; i <= 5; i++ ) {
-	sum = sum + i;
-}
-console.log(sum);   // 15
-console.log(i);     // 6
-```
+	```JAVASCRIPT
+	var sum = 0;
+	for ( var i=1; i <= 5; i++ ) {
+	  sum = sum + i;
+	}
+	console.log(sum);   // 15
+	console.log(i);     // 6
+	```
 <br />
 
 #### 5.3.2. Hoisting(호이스팅)
@@ -1735,43 +1732,43 @@ console.log(i);     // 6
 	- **함수선언식**
 		```JAVASCRIPT
 		function sum() {
-			// function statement
-			return 10 + 20
+		  // function statement
+		  return 10 + 20
 		}
 		```
 	- 함수표현식
 		```JAVASCRIPT
 		var sum = function() {
-			// function expression
-			return 10 + 20;
+		  // function expression
+		  return 10 + 20;
 		}
 		```
 - 따라서, function a()와 var 는 코드의 최상단으로 **끌어 올려진 것(hoisted)**처럼 보인다
 	```JAVASCRIPT
 	function willBeOveridden() {
-		return 10;
+	  return 10;
 	}
 	willBeOveridden();      // 5
 	function willBeOveridden() {
-		return 5;
+	  return 5;
 	}
 	```
 
 - 아래와 같은 코드를 실행할 때 자바스크립트 해석기가 어떻게 코드 순서를 재조정할까?
 	```JAVASCRIPT
 	var sum = 5;
-  sum = sum + i;
-  function sumAllNumbers() {
-    //
-  }
-  var i = 10;
+	sum = sum + i;
+	function sumAllNumbers() {
+	  //
+	}
+	var i = 10;
 	```
 	- 아래 코드 순서 
 	```JAVASCRIPT
 	// #1 - 함수 선언식과 변수 선언을 Hositing
 	var sum;
 	function sumAllNumbers() {
-    //
+	  //
 	}
 	var i;
 
@@ -1794,26 +1791,26 @@ console.log(i);     // 6
 - **Arrow Function (화살표 함수)** 또는 fat arrow(팻 애로우), 팻 화살표 함수 라고 불린다.
 - 함수를 정의할 때 **function 이라는 키워드를 사용하지 않고 => 로 대체**
 - 흔히 사용하는 *콜백 함수*의 문법을 간결화
-```JAVASCRIPT
-// ES5 함수 정의 방식
-var sum = function(a,b) {
-	return a+b;
-}
-
-// ES6 함수 정의 방식
-var sum = (a,b) => {
-	return a+b;
-}
-
-sum(10, 20);
-```
+	```JAVASCRIPT
+	// ES5 함수 정의 방식
+	var sum = function(a,b) {
+	  return a+b;
+	}
+	
+	// ES6 함수 정의 방식
+	var sum = (a,b) => {
+	  return a+b;
+	}
+	
+	sum(10, 20);
+	```
 - 화살표 함수 사용 예시
 	- ES6에서 인자가 1개일 경우 ( ) 를 하지 않아도 된다
 	```JAVASCRIPT
 	// ES5
 	var arr = ["a","b","c"];
 	arr.forEach(function(value){
-		console.log(value);     // a,b,c
+	  console.log(value);     // a,b,c
 	})
 
 	// ES6
@@ -1833,46 +1830,45 @@ sum(10, 20);
 	- lookup: function() --> lookup() 으로 변경되어 사용
 	```JAVASCRIPT
 	var dictionary = {
-		words: 100,
-		// ES5
-		lookup: function() {
-			console.log("find words")
-		},
-		// ES6
-		lookup() {
-			console.log("find words")
-		}
+	  words: 100,
+	  // ES5
+	  lookup: function() {
+	    console.log("find words")
+	  },
+	  // ES6
+	  lookup() {
+	    console.log("find words")
+	  }
 	}
 	```
 	- 사용 예시 : data() {}, addTodo() {}, clearInput() {}
-	```JAVASCRIPT
-	// TodoInput.vue
-
-	export default {
-		data() {
-			return {
-				newTodoItem: "",
-				showModal: false,
-			}
-		},
-		methods: {
-			addTodo() {
-				if(this.newTodoItem !== '') {
-					this.$emit('addTodoItem', this.newTodoItem)
-					this.clearInput();
-				} else {
-					this.showModal = !this.showModal
-				}
-			},
-			clearInput() {
-				this.newTodoItem = ""
-			}
-		},
-		components: {
-			Modal: Modal,
+		```JAVASCRIPT
+		// TodoInput.vue
+		export default {
+		  data() {
+		    return {
+		      newTodoItem: "",
+		      showModal: false,
+		    }
+		  },
+		  methods: {
+		    addTodo() {
+		      if(this.newTodoItem !== '') {
+		        this.$emit('addTodoItem', this.newTodoItem)
+		        this.clearInput();
+		      } else {
+		        this.showModal = !this.showModal
+		      }
+		    },
+		    clearInput() {
+		      this.newTodoItem = ""
+		    }
+		  },
+		  components: {
+		    Modal: Modal,
+		  }
 		}
-	}
-	```
+		```
 	<br />
 
 - **객체의 속성명과 값 명이 동일할 때** 아래와 같이 **축약 가능**
@@ -1880,24 +1876,24 @@ sum(10, 20);
 	```JAVASCRIPT
 	var figures = 10;
 	var dictionary = {
-		//figures : figures
-		figures
+	  //figures : figures
+	  figures
 	}
 	```
 	- 사용 예시 : 'TodoHeader' : TodoHeader -> TodoHeader
 	```JAVASCRIPT
 	// App.vue
-
+	
 	components: {
-    // 'TodoHeader' : TodoHeader,
-    // 'TodoInput' : TodoInput,
-    // 'TodoList' : TodoList,
-		// 'TodoFooter' : TodoFooter,
-		TodoHeader,
-		TodoInput,
-		TodoList,
-		TodoFooter,
-  }
+	  // 'TodoHeader' : TodoHeader,
+	  // 'TodoInput' : TodoInput,
+	  // 'TodoList' : TodoList,
+	  // 'TodoFooter' : TodoFooter,
+	  TodoHeader,
+	  TodoInput,
+	  TodoList,
+	  TodoFooter,
+	}
 	```
 <br />
 
@@ -1913,7 +1909,7 @@ sum(10, 20);
 ```JAVASCRIPT
 // libs/math.js
 export function sum(x, y) {
-	return x + y;
+  return x + y;
 }
 export var pi = 3.131593;
 
@@ -1934,7 +1930,7 @@ import TodoHeader from './components/TodoHeader.vue'
 ```JAVASCRIPT
 // util.js
 export default function (x) {
-	return console.log(x);
+  return console.log(x);
 }
 
 // main.js
@@ -1979,14 +1975,14 @@ Vuex : **상태 관리 라이브러리**<br />
 #### 6.2.3. MVC 패턴의 문제점
 1. 기능 추가 및 변경에 따라 생기는 문제점을 예측할 수가 없음. (예) 페이스북 채팅 화면
 2. 앱이 복잡해지면서 생기는 업데이트 루프(= 데이터의 흐름을 추적할 수 없다)<br />
-![6-2-3](./_images/6-2-3.png)<br />
-<br />
+	![6-2-3](./_images/6-2-3.png)<br />
+	<br />
 
 #### 6.2.4. Flux 패턴의 단방향 데이터 흐름
 - 데이터의 흐름이 여러 갈래로 나뉘지 않고 단방향으로만 처리
 - store == model
-![6-2-4](./_images/6-2-4.png)<br />
-<br />
+	![6-2-4](./_images/6-2-4.png)<br />
+	<br />
 
 ### 6.3. Vuex가 필요한 이유, Vuex 컨셉, Vuex 구조
 #### 6.3.1. Vuex가 왜 필요할 까?
@@ -2029,8 +2025,8 @@ Vuex : **상태 관리 라이브러리**<br />
 - 컴포넌트 --> 비동기 로직 --> 동기로직 --> 상태
 	- 비동기 로직 == Actions (메서드) : setTimeOut 같은, 데이터 변경X
 	- 동기 로직 == Mutations (메서드) : 데이터를 변경하여 State 전달
-	![6-3-3](./_images/6-3-3.png)<br />
-	<br />
+		![6-3-3](./_images/6-3-3.png)<br />
+		<br />
 - 자바스크립트 비동기 처리와 콜백 함수 글<br />
 https://joshua1988.github.io/web-development/javascript/javascript-asynchronous-operation/
 - 자바스크립트 Promise 쉽게 이해하기<br />
@@ -2116,8 +2112,8 @@ https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
 		import { store } from './store/store'
 
 		new Vue({
-			render: h => h(App),
-			store,
+		  render: h => h(App),
+		  store,
 		}).$mount('#app')
 		```
 <br />
@@ -2134,47 +2130,47 @@ https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
 #### 7.3.1. state
 - **state 란?** : 여러 컴포넌트 간에 공유할 데이터 - 상태
 	- Vue.use(Vuex); 로 글로벌 펑셔널리티(Global Functionality)로 적용 해주었기 때문에 **this.$store** 로 쓸 수 있다.
-```JAVASCRIPT
-// Vue 
-data: {
-	message : 'Hello Vue.js!'
-}
+	```JAVASCRIPT
+	// Vue 
+	data: {
+	  message : 'Hello Vue.js!'
+	}
 
-// Vuex
-state: {
-	message: 'Hello Vue.js!'
-}
-```
-```HTMl
-<!-- Vue -->
-<p>{{ message }}</p>
-
-<!-- Vuex -->
-<p>{{ this.$store.state.message }}</p>
-```
+	// Vuex
+	state: {
+	  message: 'Hello Vue.js!'
+	}
+	```
+	```HTML
+	<!-- Vue -->
+	<p>{{ message }}</p>
+	
+	<!-- Vuex -->
+	<p>{{ this.$store.state.message }}</p>
+	```
 <br />
 
 #### 7.3.2. getters
 - **getters 란?** : *state 값을 접근하는 속성*이자 *computed() 처럼 미리 연산된 값을 접근*하는 속성
-```JAVASCRIPT
-// store.js
-state: {
-	num: 10
-},
-getters: {
-	getNumber(state) {
-		return state.num;
+	```JAVASCRIPT
+	// store.js
+	state: {
+	  num: 10
 	},
-	doubleNumber(state) {
-		return state.num * 2;
-	}
+	getters: {
+	  getNumber(state) {
+	    return state.num;
+	  },
+	  doubleNumber(state) {
+	    return state.num * 2;
+	  }
 
-}
-```
-```HTML
-<p>{{ this.$store.getters.getNumber }}</p>
-<p>{{ this.$store.getters.doubleNumber }}</p>
-```
+	}
+	```
+	```HTML
+	<p>{{ this.$store.getters.getNumber }}</p>
+	<p>{{ this.$store.getters.doubleNumber }}</p>
+	```
 <br />
 
 ### 7.4. [리팩토링] state 속성 적용
@@ -2182,33 +2178,33 @@ getters: {
 	```JAVASCRIPT
 	// store.js
 	export const store = new Vuex.Store({
-		state: {
-			headerText : 'TODO it!',
-		}
+	  state: {
+	    headerText : 'TODO it!',
+	  }
 	});
 	```
 	- state에 추가한 headerText 를 적용해본다
 	```HTML
 	<!-- TodoHeader.vue -->
 	<template>
-		<header>
-			<!-- <h1>TODO it!</h1> -->
-			<h1>{{ this.$store.state.headerText}}</h1>
-		</header>
+	  <header>
+	    <!-- <h1>TODO it!</h1> -->
+	    <h1>{{ this.$store.state.headerText}}</h1>
+	  </header>
 	</template>
 	```
 	- [뷰 개발자 도구] store.js 파일의 state의 headerText 속성에 적용된 값이 화면 view에 적용된 것을 확인할 수 있다
-	![7-4-1](./_images/7-4-1.png)<br />
-	<br />
+		![7-4-1](./_images/7-4-1.png)<br />
+		<br />
 
 2. App.vue 에 적용했던 data - todoItems 를 **store.js 에 적용**한다
 	```JAVASCRIPT
 	// store.js
 
 	export const store = new Vuex.Store({
-		state: {
-			todoItems: []
-		}
+	  state: {
+	    todoItems: []
+	  }
 	});
 	```
 	<br />
@@ -2218,19 +2214,19 @@ getters: {
 	2. 만든 변수에 fetch() 라는 속성을 선언한다.
 	3. created()에 적용되었던 코드를 fetch()에 적용한다<br />
 	(기존 created() 에 적용된 API, 동작들을 fetch()에 적용)
-	```JAVASCRIPT
-	const storage = {
-		fetch() {
-			if ( localStorage.length > 0 ) {
-				for(let i=0; i < localStorage.length; i++) {
-					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-						this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-					}
-				}
-			}
+		```JAVASCRIPT
+		const storage = {
+		  fetch() {
+		    if ( localStorage.length > 0 ) {
+		      for(let i=0; i < localStorage.length; i++) {
+		        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+		          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+		        }
+		      }
+		    }
+		  }
 		}
-	}
-	```
+		```
 	<br />
 
 4. storage(스토리지) 라는 객체 변수를 export const store 에서 호출하려고 한다.<br />
@@ -2239,16 +2235,16 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 5. const storage 객체 변수의 fetch() 속성에 const arr 를 선언한다
 	```JAVASCRIPT
 	const storage = {
-		fetch() {
-			const arr = [];
-			if ( localStorage.length > 0 ) {
-				for(let i=0; i < localStorage.length; i++) {
-					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-						this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-					}
-				}
-			}
-		}
+	  fetch() {
+	    const arr = [];
+	    if ( localStorage.length > 0 ) {
+	      for(let i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	        }
+	      }
+	    }
+	  }
 	}
 	```
 	<br />
@@ -2257,17 +2253,17 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 새로 만든 빈 배열인 arr에 담아준다
 	```JAVASCRIPT
 	const storage = {
-		fetch() {
-			const arr = [];
-			if ( localStorage.length > 0 ) {
-				for(let i=0; i < localStorage.length; i++) {
-					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-						arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-					}
-				}
-			}
-			return arr;
-		}
+	  fetch() {
+	    const arr = [];
+	    if ( localStorage.length > 0 ) {
+	      for(let i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	        }
+	      }
+	    }
+	    return arr;
+	  }
 	}
 	```
 <br />
@@ -2275,23 +2271,23 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 7. storage - arr 배열에 담긴 정보를 todoItems에 넣어준다.
 	```JAVASCRIPT
 	const storage = {
-		fetch() {
-			const arr = [];
-			if ( localStorage.length > 0 ) {
-				for(let i=0; i < localStorage.length; i++) {
-					if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-						arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-					}
-				}
-			}
-			return arr;
-		}
+	  fetch() {
+	    const arr = [];
+	    if ( localStorage.length > 0 ) {
+	      for(let i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	        }
+	      }
+	    }
+	    return arr;
+	  }
 	}
 
 	export const store = new Vuex.Store({
-		state: {
-			todoItems: storage.fetch(),
-		}
+	  state: {
+	    todoItems: storage.fetch(),
+	  }
 	});
 	```
 <br />
@@ -2300,36 +2296,35 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 	```HTML
 	<!-- AS-IS -->
 	<template>
-		<div>
-			<transition-group name="list" tag="ul">
-				<li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
-					<i class="checkBtn fas fa-check" 
-						v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-						v-on:click="toggleComplate(todoItem, index)"></i>
-					<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-					<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-						<i class="fas fa-trash-alt"></i>
-					</span>
-				</li>
-			</transition-group>
-		</div>
-	</template>
-
+	  <div>
+	    <transition-group name="list" tag="ul">
+	      <li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+	        <i class="checkBtn fas fa-check" 
+	          v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+	          v-on:click="toggleComplate(todoItem, index)"></i>
+	        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </transition-group>
+	  </div>
+	</template>	
 	<!-- TO-BE -->
 	<template>
-		<div>
-			<transition-group name="list" tag="ul">
-				<li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item" class="shadow">
-					<i class="checkBtn fas fa-check" 
-						v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-						v-on:click="toggleComplate(todoItem, index)"></i>
-					<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-					<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
-						<i class="fas fa-trash-alt"></i>
-					</span>
-				</li>
-			</transition-group>
-		</div>
+	  <div>
+	    <transition-group name="list" tag="ul">
+	      <li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item" class="shadow">
+	        <i class="checkBtn fas fa-check" 
+	          v-bind:class="{checkBtnCompleted: todoItem.completed}" 
+	          v-on:click="toggleComplate(todoItem, index)"></i>
+	        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+	        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	          <i class="fas fa-trash-alt"></i>
+	        </span>
+	      </li>
+	    </transition-group>
+	  </div>
 	</template>
 	```
 <br />
@@ -2349,15 +2344,15 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 	```JAVASCRIPT
 	// store.js
 	state: { 
-		num: 10
+	  num: 10
 	},
 	mutations: {
-		printNumbers(state) {
-			return state.num
-		},
-		sumNumbers(state, anothereNum) {
-			return state.num + anotherNum;
-		}
+	  printNumbers(state) {
+	    return state.num
+	  },
+	  sumNumbers(state, anothereNum) {
+	    return state.num + anotherNum;
+	  }
 	}
 
 	// App.vue
@@ -2374,19 +2369,19 @@ store.fatch() 로 호출하면 로컬스토리지에 저장된 정보들을 다 
 	```JAVASCRIPT
 	// store.js
 	state: {
-		storeNum: 10
+	  storeNum: 10
 	},
 	mutations: {
-		modifyState(state, payload) {
-			console.log(payload.str);
-			return state.storeNum += payload.num;
-		}
+	  modifyState(state, payload) {
+	    console.log(payload.str);
+	    return state.storeNum += payload.num;
+	  }
 	}
 
 	// App.vue
 	this.$store.commit('modifyState', {
-		str: 'passed from payload',
-		num: 20
+	  str: 'passed from payload',
+	  num: 20
 	})
 	```
 	<br />
@@ -2405,13 +2400,13 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 	// App.vue
 	// created() {} 전체 삭제
 	created() {
-		if ( localStorage.length > 0 ) {
-			for(let i=0; i < localStorage.length; i++) {
-				if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-					this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-				}
-			}
-		}
+	  if ( localStorage.length > 0 ) {
+	    for(let i=0; i < localStorage.length; i++) {
+	      if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	        this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	      }
+	    }
+	  }
 	},
 	```
 <br />
@@ -2424,13 +2419,13 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 	1. store.js 의 mutations 속성을 만든 후, addOneItem 메서드를 생성하고 App.vue에 적용된 코드를 그대로 붙여넣기 한다.
 		```JAVASCRIPT
 		export const store = new Vuex.Store({
-			mutations: {
-				addOneItem() {
-					const obj = { completed: false, item: todoItem,};
-					localStorage.setItem(todoItem, JSON.stringify(obj));
-					this.todoItems.push(obj);
-				}
-			}
+		  mutations: {
+		    addOneItem() {
+		      const obj = { completed: false, item: todoItem,};
+		      localStorage.setItem(todoItem, JSON.stringify(obj));
+		      this.todoItems.push(obj);
+		    }
+		  }
 		});
 		```
 	2. App.vue - addOneItem 메서드 에선 todoItem 인자를 받고 있다.<br />
@@ -2451,11 +2446,11 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 		- 2번째 인자로는 TodoInput.vue에서 전달해준 값을 todoItem 인자로 받는다.
 		```JAVASCRIPT
 		mutations: {
-			addOneItem(state, todoItem) {
-				const obj = { completed: false, item: todoItem, };
-				localStorage.setItem(todoItem, JSON.stringify(obj));
-				this.todoItems.push(obj);
-			},
+		  addOneItem(state, todoItem) {
+		    const obj = { completed: false, item: todoItem, };
+		    localStorage.setItem(todoItem, JSON.stringify(obj));
+		    this.todoItems.push(obj);
+		  },
 		}
 		```
 
@@ -2464,16 +2459,16 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 		- state로 접근해서 값을 넣어준다
 		```JAVASCRIPT
 		export const store = new Vuex.Store({
-			state: {
-				todoItems: storage.fetch(),
-			},
-			mutations: {
-				addOneItem(state, todoItem) {
-					const obj = { completed: false, item: todoItem, };
-					localStorage.setItem(todoItem, JSON.stringify(obj));
-					state.todoItems.push(obj);
-				},
-			}
+		  state: {
+		    todoItems: storage.fetch(),
+		  },
+		  mutations: {
+		    addOneItem(state, todoItem) {
+		      const obj = { completed: false, item: todoItem, };
+		      localStorage.setItem(todoItem, JSON.stringify(obj));
+		      state.todoItems.push(obj);
+		    },
+		  }
 		});
 		```
 
@@ -2489,16 +2484,16 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 			- TodoInput.vue 와 Store.js 와 직접적으로 연관되어 있기 때문에 App.vue 에서 v-on 디렉티브는 삭제
 		```HTML
 		<template>
-			<div id="app">
-				<TodoHeader></TodoHeader>
-				<!-- TodoInput v-on:addTodoItem="addOneItem"></TodoInput  v-on 삭제-->
-				<TodoInput></TodoInput>
-				<TodoList 
-					v-bind:propsdata="todoItems" 
-					v-on:removeItem="removeOneItem"
-					v-on:toggleItem="toggleOneItem"></TodoList>
-				<TodoFooter v-on:clearAll="clearAllItem"></TodoFooter>
-			</div>
+		  <div id="app">
+		    <TodoHeader></TodoHeader>
+		    <!-- TodoInput v-on:addTodoItem="addOneItem"></TodoInput  v-on 삭제-->
+		    <TodoInput></TodoInput>
+		    <TodoList 
+		      v-bind:propsdata="todoItems" 
+		      v-on:removeItem="removeOneItem"
+		      v-on:toggleItem="toggleOneItem"></TodoList>
+		    <TodoFooter v-on:clearAll="clearAllItem"></TodoFooter>
+		  </div>
 		</template>
 		```
 		<br />
@@ -2511,36 +2506,36 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 			// TodoList.vue
 			// 방법 1
 			export default {
-				methods: {
-					removeTodo(todoItem, index) {
-						// this.$emit('removeItem', todoItem, index);
-						const obj = { 
-							todoItem,
-							index
-						};
-						this.$store.commit('removeItem', obj);
-					},
-				},
+			  methods: {
+			    removeTodo(todoItem, index) {
+			      // this.$emit('removeItem', todoItem, index);
+			      const obj = { 
+			        todoItem,
+			        index
+			      };
+			      this.$store.commit('removeItem', obj);
+			    },
+			  },
 			}
 			
 			// 방법 2
 			export default {
-				methods: {
-					removeTodo(todoItem, index) {
-						// this.$emit('removeItem', todoItem, index);
-						this.$store.commit('removeItem', { todoItem, index} );
-					},
-				},
+			  methods: {
+			    removeTodo(todoItem, index) {
+			      // this.$emit('removeItem', todoItem, index);
+			      this.$store.commit('removeItem', { todoItem, index} );
+			    },
+			  },
 			}
 			```
 		2. store.js 에서 payload로 obj 정보를 넘겨 받는다
 			```JAVASCRIPT
 			mutations: {
-				removeOneItem(state, payload) {
-					localStorage.removeItem(payload.todoItem.item);
-					state.todoItems.splice(payload.index, 1);
-				},
-				
+			  removeOneItem(state, payload) {
+			    localStorage.removeItem(payload.todoItem.item);
+			    state.todoItems.splice(payload.index, 1);
+			  },
+			  
 			}
 			```
 		3. App.vue - TodoList 컴포넌트에서 v-on:removeItem="removeOneItem" 삭제
@@ -2551,19 +2546,19 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 			```JAVASCRIPT
 			// store.js
 			mutations: {
-				toggleOneItem(state, payload) {
-				},
+			  toggleOneItem(state, payload) {
+			  },
 			}
 			```
 		2. TodoList.vue 에서 commit() 코드를 적용한다
 			```JAVASCRIPT
 			// TodoList.vue
 			export default {
-				methods: {
-					toggleComplate(todoItem, index) {
-						this.$store.commit('toggleOneItem', {todoItem, index} );
-					}
-				},
+			  methods: {
+			    toggleComplate(todoItem, index) {
+			      this.$store.commit('toggleOneItem', {todoItem, index} );
+			    }
+			  },
 			}
 			```
 		3. App.vue - TodoList 컴포넌트에서 v-on:toggleItem="toggleOneItem" 삭제
@@ -2571,13 +2566,13 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 			```JAVASCRIPT
 			// store.js
 			mutations: {
-				toggleOneItem(state, payload) {
-					state.todoItems[payload.index].completed = !state.todoItems[payload.index].completed
+			  toggleOneItem(state, payload) {
+			    state.todoItems[payload.index].completed = !state.todoItems[payload.index].completed
 
-					// 로컬 스토리지의 데이터 갱싱
-					localStorage.removeItem(payload.todoItem.item);
-					localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
-				},
+			    // 로컬 스토리지의 데이터 갱싱
+			    localStorage.removeItem(payload.todoItem.item);
+			    localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
+			  },
 			}
 			```
 		<br />
@@ -2593,11 +2588,11 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 			```JAVASCRIPT
 			// TodoFooter.vue
 			export default {
-				methods: {
-					clearTodo() {
-						this.$store.commit('clearAllItem')
-					}
-				}
+			  methods: {
+			    clearTodo() {
+			      this.$store.commit('clearAllItem')
+			    }
+			  }
 			}
 			```
 		3. App.vue - TodoFooter 컴포넌트 태그에서 v-on:clearAll="clearAllItem" 삭제
@@ -2605,8 +2600,8 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 			```JAVASCRIPT
 			// store.js
 			clearAllItem(state) {
-				localStorage.clear();
-				state.todoItems = [];
+			  localStorage.clear();
+			  state.todoItems = [];
 			}
 			```
 			<br />
@@ -2615,12 +2610,12 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 	10. App.vue, TodoList 컴포넌트 태그에서 v-bind:propsdata="todoItems" 삭제
 		```HTML
 		<template>
-			<div id="app">
-				<TodoHeader></TodoHeader>
-				<TodoInput></TodoInput>
-				<TodoList></TodoList>
-				<TodoFooter></TodoFooter>
-			</div>
+		  <div id="app">
+		    <TodoHeader></TodoHeader>
+		    <TodoInput></TodoInput>
+		    <TodoList></TodoList>
+		    <TodoFooter></TodoFooter>
+		  </div>
 		</template>
 		```
 	<br />
@@ -2635,10 +2630,109 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 	methods: {
 	  increaserCounter() {
 	    this.$store.state.counter++;
-		}
+	  }
 	}
 	```
 - 특정 시점에 어떤 컴포넌트가 state를 접근하여 변경한 건지 확인하기 어렵기 때문
 - 따라서, 뷰의 반응성을 거스르지 않게 명시적으로 상태 변화를 수행. **반응성. 디버깅. 테스팅 혜택**
 	![7-7-1](./_images/7-7-1.png)<br />
 	<br />
+
+### 7.8. actions 소개 및 예제
+- **actions 란?**
+	- 비동기 처리 로직을 선언하는 메서드, 비동기 로직을 담당하는 mutations
+	- 데이터 요청, **Promise**, ES6 async과 같은 **비동기 처리**는 모두 actions에 선언
+	```JAVASCRIPT
+	// store.js
+	state: {
+	  num: 10
+	},
+	mutations: {
+	  dobleNumber(state) {
+	    state.num * 2;
+	  }
+	},
+	actions: {
+	  delayDoubleNumber(context) { // context로 store의 메서드와 속성 접근
+	    context.commit('doubleNumber')
+	  }
+	}
+
+	// App.vue
+	this.$store.dispatch('delayDoubleNumber');
+	```
+	<br />
+
+- **actions 비동기 코드 예제 1**
+	- 비동기처리의 대표적인 예시, setTimeout 
+	- actions : dispatch 라는 API로 호출해서 실행시킨다
+		- App.vue의 메소드 incrementCounter() 에서 dispatch 로 sotre.js의 actions - delayedAddCounter를 호출하여 실행
+		- context로 store의 메서드와 속성 접근
+	```JAVASCRIPT
+	// store.js
+	mutations: {
+	  addCounter(state) {
+	    state.counter++
+	  },
+	},
+	actions: {
+	  delayedAddCounter(context) {
+	    setTimeout( () => context.commit('addCounter'), 2000 );
+	  }
+	}
+
+	// App.vue
+	methods: {
+	  incrementCounter() {
+	    this.$store.dispatch('delayedAddCounter')
+	  }
+	}
+	```
+<br />
+
+- **actions 비동기 코드 예제 2**
+	- 서버에 데이터를 불러와서 화면에 출력하는 예제
+	- App.vue의 메서드 getProduct 에서 dispatch로 store.js의 actions - fetchProductData 메서드 호출
+	- store.js 에서 actions -fetchProductData 메서드 실행
+	- axios API로 URL에 따른 정보를 받아오는데, 성공시(then) store.js의 commit으로 mutations - setData 로 호출하면서 response 로 데이터 값을 전달
+	- store.js 의 mutations - setData 에서 받은 데이터 값을 fetchedData 인자로 받는다
+	- fetchedData 인자로 전달 받은 값은 state.product 에 대입해준다.
+	```JAVASCRIPT
+	// store.js
+	mutations: {
+	  setData(state, fetchedData) {
+	    state.product = fetchedData
+	  }
+	},
+	actions: {
+	  fetchProductData(context) {
+	    return axios.get('https://domain.com/products/1)
+	                .then(response => context.commit('setData', response));
+	  }
+	}
+
+	// App.vue
+	methods: {
+	  getProduct() {
+	    this.$store.dispatch('fetchProductData');
+	  }
+	}
+	```
+
+<br />
+
+- **참고자료**
+	- Promise 이해하기 :<br />
+	https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
+	- 자바스크립트 비동기 처리 이해하기 :<br />
+	https://joshua1988.github.io/web-development/javascript/javascript-asynchronous-operation/
+	
+	<br />
+
+### 7.9. 왜 actions에 비동기 로직을 선언해야 하는 가?
+#### 왜 비동기 처리 로직은 actions에 선언해야 할 까?
+- 언제 어느 컴포넌트에서 해당 state를 호출하고, 변경했는 지 확인하기가 어려움
+- [아래 그림 참고] 여러 개의 컴포넌트에서 mutations로 시간 차를 두고 state를 변경하는 경우
+	- state 값의 변화를 추적하기 어렵기 때문에 mutations 속성에는 동기 처리 로직만 넣어야 한다.
+	![7-9-1](./_images/7-9-1.png)<br />
+
