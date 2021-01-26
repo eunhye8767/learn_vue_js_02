@@ -2752,6 +2752,9 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 
 #### 8.1.2. 헬퍼의 사용법
 - 헬퍼를 사용하고자 하는 vue 파일에서 아래와 같이 해당 헬퍼를 로딩
+	- import { } from ''  <br />
+	: 이 문법은 ES6의 Modules 문법으로 모듈화된 파일에서 변수나, 함수 등의 단일 기능을 꺼내오는 경우에는 { }를 붙여야 한다<br />
+	https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/import
 - mapState('num') => this.$store.state.num
 - ...는 ES6의 Object Spread Operator 이다
 ```javascript
@@ -2789,3 +2792,97 @@ console.log(developer);
 }
 ```
 <br />
+
+### 8.2. mapState, mapGetters 소개 및 ES6 Spread 연산자 쓰는 이유
+#### 8.2.1. mapState
+- Vuex에 선언한 state 속성을 뷰 컴포넌트에 **더 쉽게 연결**해주는 헬퍼
+	- ...mapState(['num'])  == [] 은 배열 괄호
+```javascript
+// App.vue
+import { mapState } from 'vuex'
+
+computed: {
+  ...mapState(['num'])
+  // num() { return this.$store.state.num}
+}
+
+// store.js
+state: {
+  num: 10
+}
+```
+```html
+<!-- <p>{{ this.$store.state.num }}</p> -->
+<p>{{ this.num }}</p>
+```
+<br />
+
+#### 8.2.2. mapGetters
+- Vuex에 선언한 getters 속성을 뷰 컴포넌트에 **더 쉽게 연결**해주는 헬퍼
+```javascript
+// App.vue
+import { mapGetters } from 'vuex'
+computed: {
+  ...mapGetters(['reverseMessage'])
+}
+
+// store.js
+getters: {
+  reverseMessage(state) {
+    return state.msg.split('').reverse().join('');
+  }
+}
+```
+```html
+<!-- <p>{{ this.$store.getters.reverseMessage }}</p> -->
+<p>{{ this.reverseMessage }}</p>
+```
+<br />
+
+#### 8.2.3. ES6 Spread 연산자 쓰는 이유
+- **기존 컴포넌트에 존재하는 computed 속성**과 mapGetters 속성을 **함께 쓰기 위해서 사용**하는 것이다.
+	- **... 을 사용했을 때**
+		```javascript
+		let josh = {
+		  field: 'web',
+		  language: 'js',
+		};
+		let developer = {
+		  nation: 'korea',
+		  ...josh
+		}
+
+		console.log(developer);
+		```
+		```javascript
+		// 결과값
+		[object Object] {
+		  field: 'web',
+		  language: 'js',
+		  nation: 'korea',
+		}
+		```
+	- **... 을 사용하지 않았을 때**
+		```javascript
+		let josh = {
+		  field: 'web',
+		  language: 'js',
+		};
+		let developer = {
+		  nation: 'korea',
+		  josh
+		}
+		
+		console.log(developer);
+		```
+		```javascript
+		// 결과값
+		[object Object] {
+		  josh: [object Object] {
+		    field: "web",
+		    language: "js",
+			},
+		  nation: 'korea',
+		}
+		```
+		<br />
