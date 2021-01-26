@@ -2736,3 +2736,56 @@ store.js - fetch() {} 에 적용하였기 때문에 **App.vue에서 Created() {}
 	- state 값의 변화를 추적하기 어렵기 때문에 mutations 속성에는 동기 처리 로직만 넣어야 한다.
 	![7-9-1](./_images/7-9-1.png)<br />
 
+<br />
+<br />
+<br />
+
+## 8. Vuex - 헬퍼함수
+### 8.1. 헬퍼 함수 및 ES6 Spread 연산자 소개
+#### 8.1.1. 각 속성들을 더 쉽게 사용하는 방법 - Helper
+- Store에 있는 아래 4가지 속성들을 간편하게 코딩하는 방법
+	- state -> mapState
+	- getters -> mapGetters
+	- mutations -> mapMutations
+	- actions -> mapActions
+<br />
+
+#### 8.1.2. 헬퍼의 사용법
+- 헬퍼를 사용하고자 하는 vue 파일에서 아래와 같이 해당 헬퍼를 로딩
+- mapState('num') => this.$store.state.num
+- ...는 ES6의 Object Spread Operator 이다
+```javascript
+// App.vue
+import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
+
+export default {
+  computed() { ...mapState('num'), ...mapGetters(['countedNum']) },
+  methods: { ...mapMutations(['clickBtn']), ...mapActions(['asyncClickBtn']) }
+}
+```
+- ES6의 Object Spread Operator(스프레이드 오퍼레이터로) 예제
+	- 일일이 나열하지 않아도 **...** 하나로 **전체 내용을 끌어온다(=불러온다)** 라고 생각하면 된다.
+```javascript
+let josh = {
+  field: 'web',
+  language: 'js',
+};
+let developer = {
+  nation: 'korea',
+  ...josh
+}
+
+console.log(developer);
+```
+```javascript
+// 결과값
+[object Object] {
+  field: 'web',
+  language: 'js',
+  nation: 'korea',
+}
+```
+<br />
