@@ -2151,7 +2151,7 @@ https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
 <br />
 
 #### 7.3.2. getters
-- **getters 란?** : *state 값을 접근하는 속성*이자 *computed() 처럼 미리 연산된 값을 접근*하는 속성
+- **getters 란?** : *state 값을 접근하는 속성*이자 *computed: {} 처럼 미리 연산된 값을 접근*하는 속성
 	```JAVASCRIPT
 	// store.js
 	state: {
@@ -2765,7 +2765,7 @@ import { mapMutations } from 'vuex'
 import { mapActions } from 'vuex'
 
 export default {
-  computed() { ...mapState('num'), ...mapGetters(['countedNum']) },
+  computed: { ...mapState('num'), ...mapGetters(['countedNum']) },
   methods: { ...mapMutations(['clickBtn']), ...mapActions(['asyncClickBtn']) }
 }
 ```
@@ -2886,3 +2886,130 @@ getters: {
 		}
 		```
 		<br />
+
+### 8.3. [리팩토링] getters와 mapGetters 적용하기
+1. mapGetters 를 쓰기 전, getters 를 먼저 적용해본다.
+2. store.js 에 getters - storedTodoItems() 속성을 추가한다.
+	```javascript
+	export const store = new Vuex.Store({
+	  state: {
+	    todoItems: storage.fetch(),
+	  },
+	  getters: {
+	    storedTodoItems(state) {
+	      return state.todoItems;
+	    }
+	  },
+	}
+	```
+3. TodoList.vue 에서 getters에 접근한다
+	- v-for="**(todoItem, index) in this.$store.state.todoItems**" 에서<br />**this.$store.getters.storedTodoItems**적용할 수 있다
+	```html
+	<template>
+	  <div>
+	    <transition-group name="list" tag="ul">
+	      <li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item" class="shadow">
+	      </li>
+	    </transition-group>
+	  </div>
+	</template>
+	```
+4. 뷰 개발자도구, getters에 등록된 것을 확인할 수 있다.<br />
+	![8-1-1](./_images/8-1-1.png)<br />
+	<br />
+5. 그런데 보통은 위와 같이 쓰질 않는다.
+6. TodoList.vue 에서 computed: {} 속성을 추가하여 사용한다
+	- template li v-for 디렉티브에 적용했던 this.$store.getters.storedTodoItems를<br />script computed - todoItem속성에 적용한다
+		```javascript
+		export default {
+		  computed: {
+		    todoItems() {
+		      return this.$store.getters.storedTodoItems;
+		    }
+		  }
+		}
+		```
+	- template li v-for 디렉티브에 적용했던 this.$store.getters.storedTodoItems는<br />this.todoItems으로 적용한다
+		```html
+		<template>
+		  <div>
+		    <transition-group name="list" tag="ul">
+		      <li v-for="(todoItem, index) in this.todoItems" v-bind:key="todoItem.item" class="shadow">
+		      </li>
+		    </transition-group>
+		  </div>
+		</template>
+		```
+	- 이런 부분들이 **vue에서 권고하는 가이드** 이다.
+	- **template 안에서 표현하는 부분은 가급적 자바스크립트 연산,<br />전체적인 속성 접근을 최대한 줄이는 방안에서 template깔끔하게 표기**한다.<br />그리고 깔끔하게 표기해야하는 연산 등은<br />script(해당 컴포넌트의 내부 로직, 예시 TodoList.vue) script안에서 해결한다.
+
+7. mapGetters 적용해보기
+8. TodoList.vue 파일에 import 로 mapGetters 를 적용한다
+	- import 를 적용해야 mapGetters 에 접근할 수 있다
+	- computed 속성에 ...mapGetters 를 추가해준다. [''] 배열 안에는 stores.js에서 명시한 storedTodoItems 이름을 적용한다
+		```javascript
+		// TodoList.vue
+		import { mapGetters } from 'vuex
+		export default {
+		  computed: {
+		    ...mapGetters(['storedTodoItems']),
+		  }
+		}
+		```
+	- script에 적용을 한 후, template에 this.storedTodoItems 로 적용한다
+		```html
+		<template>
+		  <div>
+		    <transition-group name="list" tag="ul">
+		      <li v-for="(todoItem, index) in this.storedTodoItems" v-bind:key="todoItem.item" class="shadow">
+		      </li>
+		    </transition-group>
+		  </div>
+		</template>
+		```
+9. 번외로 ...mapGetters(['storedTodoItems']) 에서 배열이 아닌 객체 형태로도 적용할 수도 있다.
+	- store.js 에서 명시한 getters 이름과 컴포넌트.vue 파일에서 명시한 이름이 서로 다를 때
+	- template 에서 this.todoItems 로 적용
+		```html
+		<template>
+		  <div>
+		    <transition-group name="list" tag="ul">
+		      <li v-for="(todoItem, index) in this.todoItems" v-bind:key="todoItem.item" class="shadow">
+		      </li>
+		    </transition-group>
+		  </div>
+		</template>			
+		```
+	- store.js - getters: storedTodoItems 명시
+		```javascript
+		// store.js
+		getters: {
+		   storedTodoItems(state) {
+		     return state.todoItems;
+		   }
+		}
+		// TodoLIst.vue
+		computed: {
+		  ...mapGetters({
+		    todoItems: 'storedTodoItems'
+		  }),
+		}
+		```
+10. mapGetters 처럼 mapState도 적용해보기
+	```html
+	<h1>{{ this.headerText}}</h1>
+	```
+	```javascript
+	// store.js
+	state: {
+	  headerText : 'TODO it!',
+	},
+
+	// TodoHeader.vue
+	import { mapState } from 'vuex'
+	export default {
+	  computed: {
+	    ...mapState(['headerText']),
+	  }
+	}
+	```
