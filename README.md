@@ -2796,47 +2796,49 @@ console.log(developer);
 ### 8.2. mapState, mapGetters 소개 및 ES6 Spread 연산자 쓰는 이유
 #### 8.2.1. mapState
 - Vuex에 선언한 state 속성을 뷰 컴포넌트에 **더 쉽게 연결**해주는 헬퍼
+- computed: {} 에서 ...mapState(['']) 으로 선언
 	- ...mapState(['num'])  == [] 은 배열 괄호
-```javascript
-// App.vue
-import { mapState } from 'vuex'
+	```javascript
+	// App.vue
+	import { mapState } from 'vuex'
 
-computed: {
-  ...mapState(['num'])
-  // num() { return this.$store.state.num}
-}
+	computed: {
+	  ...mapState(['num'])
+	  // num() { return this.$store.state.num}
+	}
 
-// store.js
-state: {
-  num: 10
-}
-```
-```html
-<!-- <p>{{ this.$store.state.num }}</p> -->
-<p>{{ this.num }}</p>
-```
+	// store.js
+	state: {
+	  num: 10
+	}
+	```
+	```html
+	<!-- <p>{{ this.$store.state.num }}</p> -->
+	<p>{{ this.num }}</p>
+	```
 <br />
 
 #### 8.2.2. mapGetters
 - Vuex에 선언한 getters 속성을 뷰 컴포넌트에 **더 쉽게 연결**해주는 헬퍼
-```javascript
-// App.vue
-import { mapGetters } from 'vuex'
-computed: {
-  ...mapGetters(['reverseMessage'])
-}
-
-// store.js
-getters: {
-  reverseMessage(state) {
-    return state.msg.split('').reverse().join('');
-  }
-}
-```
-```html
-<!-- <p>{{ this.$store.getters.reverseMessage }}</p> -->
-<p>{{ this.reverseMessage }}</p>
-```
+- computed: {} 에서 ...mapGetters(['']) 으로 선언
+	```javascript
+	// App.vue
+	import { mapGetters } from 'vuex'
+	computed: {
+	  ...mapGetters(['reverseMessage'])
+	}
+	
+	// store.js
+	getters: {
+	  reverseMessage(state) {
+	    return state.msg.split('').reverse().join('');
+	  }
+	}
+	```
+	```html
+	<!-- <p>{{ this.$store.getters.reverseMessage }}</p> -->
+	<p>{{ this.reverseMessage }}</p>
+	```
 <br />
 
 #### 8.2.3. ES6 Spread 연산자 쓰는 이유
@@ -3012,4 +3014,73 @@ getters: {
 	    ...mapState(['headerText']),
 	  }
 	}
+	```
+
+<br />
+
+### 8.4. mapMutations, mapActions 소개 및 헬퍼의 유연한 문법
+#### 8.4.1. mapMutations
+- Vuex에 선언한 mutations 속성을 뷰 컴포넌트에 **더 쉽게 연결**해주는 헬퍼
+- methods: {} 에서 ...mapMutations(['']) 으로 선언
+	```javascript
+	// App.vue
+	import { mapMutations } from 'vuex'
+
+	methods: {
+	  ...mapMutations(['clickBtn']),
+	  authLogin() {},
+	  displayTable() {}
+	}
+
+	// store.js
+	mutations: {
+	  clickBtn(state) {
+	    alert(state.msg);
+	  }
+	}
+	```
+	```html
+	<button @click="clickBtn">popup message</button>
+	```
+<br />
+
+#### 8.4.2. mapActions
+- Vuex에 선언한 actions 속성을 뷰 컴포넌트에 **더 쉽게 연결**해주는 헬퍼
+- methods: {} 에서 ...mapActions(['']) 으로 선언
+	```javascript
+	// App.vue
+	import { mapActions } from 'vuex'
+
+	methods: {
+	  ...mapActions(['delayClickBtn']),
+	}
+
+	// store.js
+	actions: {
+	  delayClickBtn(context) {
+	    setTimeout( () => context.commit('clickBtn'), 2000)
+	  }
+	}
+	```
+	```html
+	<button @click="delayClickBtn">delay popup message</button>
+	```
+<br />
+
+#### 8.4.3. 헬퍼의 유연한 문법
+- Vuex에 선언한 속성을 **그대로 컴포넌트에 연결**하는 문법
+	- 인자를 선언하지 않아도 인자의 값을 넘겨준다. addNumber(인자)  -> addNumber
+	```javascript
+	// 배열 리터럴
+	...mapMutations([
+	  'clickBtn',   // 'clickBtn': clickBtn
+	  'addNumber'   // addNumber(인자)
+	])
+	```
+- Vuex에 선언한 속성을 **컴포넌트의 특징 메서드에다가 연결**하는 문법
+	```javascript
+	// 객체 리터럴
+	...mapMutations({
+	  popupMsg: 'clickBtn'   // 컴포넌트 메서드 명 : Store의 뮤테이션 명
+	})
 	```
