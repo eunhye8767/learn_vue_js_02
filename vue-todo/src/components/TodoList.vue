@@ -4,9 +4,9 @@
 			<li v-for="(todoItem, index) in this.storedTodoItems" v-bind:key="todoItem.item" class="shadow">
 				<i class="checkBtn fas fa-check" 
 					v-bind:class="{checkBtnCompleted: todoItem.completed}" 
-					v-on:click="toggleComplate(todoItem, index)"></i>
+					v-on:click="toggleComplate({todoItem, index})"></i>
 				<span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-				<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+				<span class="removeBtn" v-on:click="removeTodo({todoItem, index})">
 					<i class="fas fa-trash-alt"></i>
 				</span>
 			</li>
@@ -15,18 +15,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
 	methods: {
-		removeTodo(todoItem, index) {
-			// this.$emit('removeItem', todoItem, index);
-			this.$store.commit('removeOneItem', {todoItem, index} );
-		},
-		toggleComplate(todoItem, index) {
-			// this.$emit('toggleItem', todoItem, index);
-			this.$store.commit('toggleOneItem', {todoItem, index} );
-		}
+		...mapMutations({
+			// 컴포넌트 메서드 명 : Store의 뮤테이션 명
+			removeTodo : 'removeOneItem',
+			toggleComplate : 'toggleOneItem',
+		}),
+		// removeTodo(todoItem, index) {
+		// 	// this.$emit('removeItem', todoItem, index);
+		// 	this.$store.commit('removeOneItem', {todoItem, index} );
+		// },
+		// toggleComplate(todoItem, index) {
+		// 	// this.$emit('toggleItem', todoItem, index);
+		// 	this.$store.commit('toggleOneItem', {todoItem, index} );
+		// },
 	},
 	computed: {
 		// todoItems() {

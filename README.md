@@ -2827,7 +2827,7 @@ console.log(developer);
 	computed: {
 	  ...mapGetters(['reverseMessage'])
 	}
-	
+
 	// store.js
 	getters: {
 	  reverseMessage(state) {
@@ -3084,3 +3084,42 @@ console.log(developer);
 	  popupMsg: 'clickBtn'   // 컴포넌트 메서드 명 : Store의 뮤테이션 명
 	})
 	```
+<br />
+
+### 8.5. mapMutations 적용 및 풀이과정
+1. TodoList.vue 에서 mapMutations 를 선언한다
+	- 2개 이상 선언할 땐 ,(컴마)로 구분한다 { mapGetters, mapMutations }
+	```javascript
+	// TodoList.vue
+	import { mapGetters, mapMutations } from 'vuex'
+	```
+2. [ TodoList.vue ] removeTodo 메서드를 ...mapMutations 으로 변경한다
+	- 컴포넌트 태그
+	```html
+	<span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+	```
+	- mapMutations **적용 전**
+		```javascript
+		export default {
+		methods: {
+		  removeTodo(todoItem, index) {
+		    this.$store.commit('removeOneItem', {todoItem, index} );
+		  },
+		},
+		```
+	- mapMutations **적용 후**
+		- ...mapMutations 경우 { todoItem, index } 의 인자를 따로 **기재하지 않아도 된다**
+		- 컴포넌트 태그에 인자가 적용되어 있으면 자동으로 ...mapMutations 으로 받아온다.
+		- 그런데 컴포넌트 태그를 보면 (todoItem, index) 인자를 2개 받아오는 걸로 적용되어 있다.<br />해당 부분을 ({todoItem, index}) 으로 변경하면 된다
+		```html
+		<span class="removeBtn" v-on:click="removeTodo({todoItem, index})">
+		```
+		```javascript
+		methods: {
+		  ...mapMutations({
+		    // 컴포넌트 메서드 명 : Store의 뮤테이션 명
+		    removeTodo : 'removeOneItem'
+		  }),
+		}
+		```
+<br />
