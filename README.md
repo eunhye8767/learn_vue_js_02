@@ -3229,3 +3229,115 @@ console.log(developer);
 	  }
 	}
 	```
+	<br />
+	<br />
+	<br />
+
+## 9. Vuex - 프로젝트 구조화 및 모듈화
+### 9.1. 스토어 속성 모듈화 방법
+#### 9.1.1. 프로젝트 구조화와 모듈화 방법
+아래와 같은 store 구조를 어떻게 모듈화 할 수 있을 까?
+```javascript
+// store.js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+export const store = new Vuex.Store({
+	state: {},
+	getters: {},
+	mutations: {},
+	actions: {}
+})
+```
+- ES6의 import & export를 이용하여 속성별로 모듈화
+	- import * as 로 연결해준다
+```javascript
+import Vue from 'vue'
+import Vuex from 'vuex'
+import * as getters from 'store/getters.js'
+import * as mutations from 'store/mutations.js'
+import * as actions from 'store/actions.js'
+
+export const stroe = new Vuex.Store({
+	state: {},
+	getters: getters,
+	mtations: mutations,
+	actions: actions
+})
+```
+<br />
+
+#### 9.1.2. 프로젝트 구조화와 모듈화 실습
+1. store 폴더에 getters.js, mutations.js 파일 생성
+2. store.js - getters 에 적용되어 있는 storedTodoItems 메서드를 **getters.js에 적용**한다
+	- export const 메서드명 = (매개변수) => {}
+	```javascript
+	// store.js
+	getters: {
+	  storedTodoItems(state) {
+	    return state.todoItems;
+    }
+	}
+
+	// getters.js
+	export const storedTodoItems = (state) => {
+	  return state.todoItems;
+	}
+	```
+	<br />
+
+3. store.js - mutations에 적용된 메서드를 **mutations.js에 적용**한다
+	- export const 메서드명 = (매개변수) => {}
+	- const 메서드명 = (매개변수) => {} 로 쓰고<br />아래 코드처럼 export  { 메서드명1, 메서드명2 }
+	```javascript
+	const addOneItem = (state, todoItem) => {
+	  const obj = { completed: false, item: todoItem, };
+	  localStorage.setItem(todoItem, JSON.stringify(obj));
+	  // this.todoItems.push(obj);
+	  state.todoItems.push(obj);
+	};
+	
+	const removeOneItem = (state, payload) => {
+	  localStorage.removeItem(payload.todoItem.item);
+	  state.todoItems.splice(payload.index, 1);
+	};
+	
+	const toggleOneItem = (state, payload) => {
+	  state.todoItems[payload.index].completed = !state.todoItems[payload.index].completed
+	
+	  // 로컬 스토리지의 데이터 갱싱
+	  localStorage.removeItem(payload.todoItem.item);
+	  localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
+	};
+	
+	const clearAllItem = (state) => {
+	  localStorage.clear();
+	  state.todoItems = [];
+	};
+
+	export  { addOneItem, removeOneItem, toggleOneItem, clearAllItem}
+	```
+	<br />
+
+4. getters.js 와 mutations.js 작업을 완료했다면<br />store.js 에서 만든 속성별 모듈화 파일을 import 한다.
+	```javascript
+	// store.js
+	import * as getters from './getters'
+	import * as mutations from './mutations'
+
+	export const store = new Vuex.Store({
+	  getters: getters,
+	  mutations: mutations,
+	});
+	```
+	- ES6 문법에 따라 key:Value 값이 같으면 축약이 가능하다
+	```javascript
+	// store.js
+	import * as getters from './getters'
+	import * as mutations from './mutations'
+
+	export const store = new Vuex.Store({
+	  getters,
+	  mutations,
+	});
+	```	
