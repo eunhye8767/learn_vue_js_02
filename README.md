@@ -3123,3 +3123,109 @@ console.log(developer);
 		}
 		```
 <br />
+
+### 8.6. 헬퍼 함수가 주는 간편함
+1. store/demoStore.js 파일을 생성한다
+	```javascript
+	// demoStore.js
+	import Vue from 'vue'
+	import Vuex from 'vuex'
+
+	Vue.use(Vuex);
+
+	export const store = new Vuex.Store({
+	  state: {
+	    price : 100
+	  },
+	  getters: {
+	    originalPrice(state) {
+	      return state.price;
+	    },
+	    doublePrice(state) {
+	      return state.price * 2;
+	    },
+	    triplePrice(state) {
+	      return state.price * 3;
+	    }
+	  }
+	});
+	```
+	<br />
+
+2. components/Demo.vue 파일을 생성한다
+	```html
+	<template>
+	  <div id="root">
+	    <p>{{ this.$store.getters.originalPrice }}}</p>
+	    <p>{{ this.$store.getters.doublePrice }}}</p>
+	    <p>{{ this.$store.getters.triplePrice }}}</p>
+	  </div>
+	</template>
+	```
+	```javascript
+	export default {
+	  computed: {
+	    originalPrice() {
+				
+	    },
+	    doublePrice() {
+				
+	    },
+	    triplePrice() {
+				
+	    }
+	  }
+	}
+	```
+<br />
+
+3. Vue에서 권고하는 것은 template 에서 최대한 심플, 간결, 단순하게 표현하는 것이다.<br />2번처럼 적용되었던 부분을 아래와 같이 수정한다.
+	```html
+	<template>
+	  <div id="root">
+	    <p>{{ originalPrice }}}</p>
+	    <p>{{ doublePrice }}}</p>
+	    <p>{{ triplePrice }}}</p>
+	  </div>
+	</template>
+	```
+	```javascript
+	export default {
+	  computed: {
+	    originalPrice() {
+	      return this.$store.getters.originalPrice;
+	    },
+	    doublePrice() {
+	      return this.$store.getters.doublePrice
+	    },
+	    triplePrice() {
+	      return this.$store.getters.triplePrice
+	    }
+	  }
+	}
+	```
+<br />
+
+4. 위와 같이 적용한 부분을 mapGetters로 적용한다
+	- 컴포넌트 태그에 명시한 이름과<br />store.js - getters에서 명시한 이름이 **동일하기 때문에**<br />mapGetters **배열로 적용**한다
+	- **template 에서** {{ this.originalPrice }} 가 아닌 **{{ originalPrice }}} 적용**
+		- **템플릿의 HTML 코드에서 computed, data 를 사용할 때엔 this 없이** originalPrice 처럼 사용한다
+		- this는 컴포넌트의 자바스크립트 부분에만 넣으면 된다.
+	```html
+	<template>
+	  <div id="root">
+	    <p>{{ originalPrice }}}</p>
+	    <p>{{ doublePrice }}}</p>
+	    <p>{{ triplePrice }}}</p>
+	  </div>
+	</template>
+	```
+	```javascript
+	import { mapGetters } from 'vuex'
+
+	export default {
+	  computed: {
+	    ...mapGetters(['originalPrice','doublePrice','triplePrice']),
+	  }
+	}
+	```
