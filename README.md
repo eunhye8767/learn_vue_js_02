@@ -3382,7 +3382,7 @@ const actions = {}
 	   }
 	});
 	```
-	
+
 4. todoApp.js 파일에서 state를 선언한다
 	- modules js 파일로 구조화 할 경우, 화살표 함수 방식이 아닌 변수를 만들고 그 안에 메서드를 적용한다.
 	- const 변수 -= { 기존 메서드 방식과 동일 }
@@ -3445,3 +3445,19 @@ const actions = {}
 	  mutations
 	}
 	```
+	<br />
+	<br />
+	<br />
+
+## 10. 번외
+### 10.1. export default
+- export default는 ES6의 modules 구문
+- 기존의 ES5 방식은 변수에 컴포넌트 내용을 넣어 인스턴스 안에서 참조하는 방식이었다. 같은 파일 내에 변수를 선언했기 때문에 그냥 일반 자바스크립트 값을 참조하듯이 참조할 수 있었다. **export default는 다른 파일의 있는 내용을 참조해오기 위한 방식**이다. 
+- https://ko.javascript.info/import-export#ref-4122
+- export 와 export default 차이
+	- export 할 경우에는 import { 함수명 } from * 으로 사용
+	- export default 하실 경우에는 import 함수명 from * 으로 사용
+- export default :<br />
+코딩중 export할 파일소스내 제일처음 export default로 정의한 클래스(함수, 변수등 모든 정의되것들)로 가지고옴, 같은 소스내에 export default로 정의한 것들이 여러개 있다하더라도 제일처음 정의 한건만 가능
+- export :<br />
+export할 파일소스내의 클래스(함수, 변수등 모든 정의되것들)들중 위 답변 “import {그안에 들어있는 것들중1, 것들중2,것들중3, 계속추가} from 파일.js” 처럼 특정해서 사용됨
