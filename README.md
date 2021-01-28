@@ -3235,7 +3235,7 @@ console.log(developer);
 
 ## 9. Vuex - 프로젝트 구조화 및 모듈화
 ### 9.1. 스토어 속성 모듈화 방법
-#### 9.1.1. 프로젝트 구조화와 모듈화 방법
+#### 9.1.1. 프로젝트 구조화와 모듈화 방법 1
 아래와 같은 store 구조를 어떻게 모듈화 할 수 있을 까?
 ```javascript
 // store.js
@@ -3243,10 +3243,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 export const store = new Vuex.Store({
-	state: {},
-	getters: {},
-	mutations: {},
-	actions: {}
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {}
 })
 ```
 - ES6의 import & export를 이용하여 속성별로 모듈화
@@ -3259,15 +3259,15 @@ import * as mutations from 'store/mutations.js'
 import * as actions from 'store/actions.js'
 
 export const stroe = new Vuex.Store({
-	state: {},
-	getters: getters,
-	mtations: mutations,
-	actions: actions
+  state: {},
+  getters: getters,
+  mtations: mutations,
+  actions: actions
 })
 ```
 <br />
 
-#### 9.1.2. 프로젝트 구조화와 모듈화 실습
+#### 9.1.2. 프로젝트 구조화와 모듈화 1 실습
 1. store 폴더에 getters.js, mutations.js 파일 생성
 2. store.js - getters 에 적용되어 있는 storedTodoItems 메서드를 **getters.js에 적용**한다
 	- export const 메서드명 = (매개변수) => {}
@@ -3341,3 +3341,107 @@ export const stroe = new Vuex.Store({
 	  mutations,
 	});
 	```	
+	<br />
+
+### 9.2. 스토어 모듈화 방법
+#### 9.2.1 프로젝트 구조화와 모듈화 방법 2
+- 앱이 비대해져서 1개의 store로는 관리가 힘들 때 modules 속성 사용
+```javascript
+// store.js
+import Vue from 'vue'
+import Vuex from 'vuex'
+import todo from 'modules/todo.js'
+
+export const store = new Vuex.Store({
+  modules : {
+    moduleA: todo    // 모듈 명칭 ; 모듈 파일명
+    todo             // todo : todo
+  }
+});
+
+// todo.js
+const state = {}
+const getters = {}
+const mutations = {}
+const actions = {}
+```
+
+#### 9.2.2. 프로젝트 구조화와 모듈화 2 실습
+*(모듈화 1에서 작업한 상태에서 진행하여 1번 실습내용을 확인할땐 체크아웃 b15201a 해서 확인하기)*
+1. store 폴더 안에 modules 폴더를 만들고 todoApp.js 파일을 생성한다
+2. store.js 파일에서 import * as 로 선언하는 문구는 삭제한다.
+3. store.js 파일에 import로 todoApp.js 파일을 선언한다
+	- import 에서 선언한 경로의 파일인 todoApp 파일이 변수 todoApp에 담겨서 modules 의 todoApp으로 선언<br />ES6 문법에 따라서 todoApp : todoApp => todoApp
+	```javascript
+	// store.js 
+	import todoApp from './modules/todoApp'
+
+	export const store = new Vuex.Store({
+	   modules: {
+	     todoApp,
+	   }
+	});
+	```
+	
+4. todoApp.js 파일에서 state를 선언한다
+	- modules js 파일로 구조화 할 경우, 화살표 함수 방식이 아닌 변수를 만들고 그 안에 메서드를 적용한다.
+	- const 변수 -= { 기존 메서드 방식과 동일 }
+	```javascript
+	// todoApp.js
+	const storage = {
+	  fetch() {
+	    const arr = [];
+	    if ( localStorage.length > 0 ) {
+	      for(let i=0; i < localStorage.length; i++) {
+	        if(localStorage.key(i) !== 'loglevel:webpack-dev-server') {
+	          arr.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+	        }
+	      }
+	    }
+	    return arr;
+	  }
+	}
+
+	const state = {
+	  todoItems: storage.fetch(),
+	}
+
+	const getters = {
+	  storedTodoItems(state) {
+	    return state.todoItems;
+	  }
+	}
+
+	const mutations = {
+	  addOneItem(state, todoItem) {
+	    const obj = { completed: false, item: todoItem, };
+	    localStorage.setItem(todoItem, JSON.stringify(obj));
+	    // this.todoItems.push(obj);
+	    state.todoItems.push(obj);
+	  },
+
+	  removeOneItem(state, payload) {
+	    localStorage.removeItem(payload.todoItem.item);
+	    state.todoItems.splice(payload.index, 1);
+	  },
+
+	  toggleOneItem(state, payload) {
+	    state.todoItems[payload.index].completed = !state.todoItems[payload.index].completed
+
+	    // 로컬 스토리지의 데이터 갱싱
+	    localStorage.removeItem(payload.todoItem.item);
+	    localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
+	  },
+
+	  clearAllItem(state) {
+	    localStorage.clear();
+	    state.todoItems = [];
+	  }
+	}
+
+	export default {
+	  state,
+	  getters,
+	  mutations
+	}
+	```
