@@ -3459,5 +3459,7 @@ const actions = {}
 	- export default 하실 경우에는 import 함수명 from * 으로 사용
 - export default :<br />
 코딩중 export할 파일소스내 제일처음 export default로 정의한 클래스(함수, 변수등 모든 정의되것들)로 가지고옴, 같은 소스내에 export default로 정의한 것들이 여러개 있다하더라도 제일처음 정의 한건만 가능
+	- export default를 사용할 때 var, let, const는 사용하지 못합니다.
 - export :<br />
 export할 파일소스내의 클래스(함수, 변수등 모든 정의되것들)들중 위 답변 “import {그안에 들어있는 것들중1, 것들중2,것들중3, 계속추가} from 파일.js” 처럼 특정해서 사용됨
+- mdn 참고 : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/export
